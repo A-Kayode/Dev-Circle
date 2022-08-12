@@ -1,0 +1,95 @@
+{% extends 'landing/base.html' %}
+
+{% block internal_styles %}
+<style>
+div{ border:1px solid red; min-height:20px; }
+
+</style>
+{% endblock internal_styles %}
+
+{% block body %}
+<div class= "container">
+	<div class= "row align-items-center">
+		<div class= "col">
+			<h2>
+				<img src= "/static/images/dev_circle.png" alt= "devcircle logo" id= "logo">
+			</h2>
+		</div>
+
+		<div class= "col">
+			<ul id= "landingnavigation" class= "nav justify-content-end">
+				<li class="nav-item"><a href= "/" class= "btn nav-link land-navig-link">Home</a></li>
+				<li class="nav-item"><button class= "btn land-navig-link" data-bs-toggle= "modal" data-bs-target= "#login_modal">Login</button></li>
+				<li class="nav-item"><button class= "btn land-navig-link" data-bs-toggle= "modal" data-bs-target= "#signup_modal">SignUp</button></li>
+				<li class="nav-item"><a href= "#" class= "btn nav-link land-navig-link">Contact Us</a></li>
+			</ul>
+		</div>
+	</div>
+
+
+
+
+	<div class= "row">
+		<div class= "col" id= "home_banner">
+			<div class= "row">
+				<div class= "col" id= "banner_overlay">
+					<div class= "row">
+						<div class= "col" style= "color: white">
+							<h2>New to Software Development? Never Feel Alone Again!</h2>
+							<p>DEV-CIRCLE connects you to new and experienced software developers all over the world.</p>
+							<p>Share posts, messages, problems and even tasks with fellow developers about the languages that makes you most excited.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+	<div class= "row">
+		<div class= "col">
+			<p>Join and Create Groups where you interact with developers that share your interest.</p>
+			<p>Want a place to hangout with you friends, create a private group just for that. Your rules, your way.</p>
+		</div>
+	</div>
+
+
+
+
+
+	<div class= "row">
+		<div class= "col">
+			<p>Sharpens your skills, assign tasks and projects to your group memebers. </p>
+		</div>
+	</div>
+
+
+
+
+
+	<div class= "row">
+		<div class= "col">
+			<p>This is the footer area</p>
+		</div>
+	</div>
+</div>
+
+{% include 'landing/login_modal.html' %}
+{% include 'landing/signup_modal.html' %}
+
+{% block internal_script %}
+<script type= "text/javascript">
+/* This is to reativate signup modal if validation fails on serverside */
+var plink= {{ request.path }};
+$(document).ready(function(){
+	if (plink == '/signup/'){
+		$('#signup_modal').modal('show');
+	}
+});
+
+</script>
+{% endblock internal_script %}
+{% endblock body %}

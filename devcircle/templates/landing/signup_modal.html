@@ -1,0 +1,50 @@
+<div class="modal" id="signup_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">SignUp</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/signup/" method="post">
+          <div class= "mb-2">
+            <label class= "form-label">First Name</label>
+            <span style= "color:red">{{ Signup.fname.errors[0] }}</span>
+            {{ Signup.fname(class_="form-control") }}
+          </div>
+          <div class= "mb-2">
+            <label class= "form-label">Last Name</label>
+            <span style= "color:red">{{ Signup.lname.errors[0] }}</span>
+            {{ Signup.lname(class_="form-control") }}
+          </div>
+          <div class= "mb-2">
+            <label class= "form-label">Email Address</label>
+            <span style= "color:red">{{ Signup.email.errors[0] }}</span>
+            {{ Signup.email(class_="form-control") }}
+          </div>
+          <div class= "mb-2">
+            <label class= "form-label">Username</label>
+            <span style= "color:red">{{ Signup.username.errors[0] }}</span>
+            {{ Signup.username(class_="form-control") }}
+          </div>
+          <div class= "mb-2">
+            <label class= "form-label">Password</label>
+            <span style= "color:red">{{ Signup.password.errors[0] }}</span>
+            <div style= "position:relative">
+              {{ Signup.password(class_="form-control password") }}
+              <button type="button" class= "btn btn-sm show_password" style= "position:absolute; right:0%; top:5%"><i class= "fa-solid fa-eye eye_icon"></i></button>
+            </div>
+          </div>
+          <div>
+            <button class= "btn btn-success">Submit</button>
+          </div>
+          {{ Signup.csrf_token }}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

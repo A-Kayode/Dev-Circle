@@ -1,0 +1,12 @@
+/* This contains all the external styles for the dev-circle web application*/
+
+#logo{ height:70px; }
+.land-navig-link{ color:#1b9d46 !important; }
+
+/* This controls the banner on the home page  */
+#home_banner{ 
+	background-image: url("../images/computers.jpg"); height:75vh; background-size: 100% 100%;
+} 
+#banner_overlay{
+	background-color: rgba(0,0,0,0.3); height: 75vh;
+}
