@@ -1,0 +1,22 @@
+{% extends 'landing/base.html' %}
+
+{% block internal_styles %}
+<style>
+	div{border: 1px solid red;}
+</style>
+{% endblock internal_styles %}
+
+{% block body %}
+<div class= "row">
+	<div class= "col">
+		<h2>{{g.grp_name}}</h2>
+		<p>{{g.grp_desc}}</p>
+		<p><i>This is a {{g.grp_type.name}} group</i></p>
+	</div>
+</div>
+
+
+{% endblock body %}
+
+{% block internal_scripts %}
+{% endblock internal_scripts %}

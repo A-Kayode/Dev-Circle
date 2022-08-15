@@ -71,7 +71,7 @@ class Member(db.Model):
     grp_id= db.Column(db.Integer(), db.ForeignKey('group.grp_id'))
     dev_id= db.Column(db.Integer(), db.ForeignKey('developer.dev_id'))
     admin= db.Column(db.Enum(Is_admin), default=Is_admin.no.name)
-    join_date= db.Column(db.DateTime())
+    join_date= db.Column(db.DateTime(), default=func.now())
     task_availablity= db.Column(db.Enum(Availability), default=Availability.available.name)
 
     group= db.relationship('Group', backref='members')

@@ -1,4 +1,4 @@
-{% extends 'landing/base.html' %}
+{% extends 'home/base.html' %}
 
 {% block internal_styles %}
 <style>
@@ -8,20 +8,21 @@ div{ border:1px solid red; min-height:20px; }
 {% endblock internal_styles %}
 
 {% block body %}
+{{request.path}}
 <div class= "container">
 	<div class= "row align-items-center">
 		<div class= "col">
 			<h2>
-				<img src= "/static/images/dev_circle.png" alt= "devcircle logo" id= "logo">
+				<img src= "/static/images/dev_circle.png" alt= "devcircle logo" class= "logo">
 			</h2>
 		</div>
 
 		<div class= "col">
-			<ul id= "landingnavigation" class= "nav justify-content-end">
-				<li class="nav-item"><a href= "/" class= "btn nav-link land-navig-link">Home</a></li>
-				<li class="nav-item"><button class= "btn land-navig-link" data-bs-toggle= "modal" data-bs-target= "#login_modal">Login</button></li>
-				<li class="nav-item"><button class= "btn land-navig-link" data-bs-toggle= "modal" data-bs-target= "#signup_modal">SignUp</button></li>
-				<li class="nav-item"><a href= "#" class= "btn nav-link land-navig-link">Contact Us</a></li>
+			<ul id= "homenavigation" class= "nav justify-content-end">
+				<li class="nav-item"><a href= "/" class= "btn nav-link home-navig-link">Home</a></li>
+				<li class="nav-item"><button class= "btn home-navig-link" data-bs-toggle= "modal" data-bs-target= "#login_modal">Login</button></li>
+				<li class="nav-item"><button class= "btn home-navig-link" data-bs-toggle= "modal" data-bs-target= "#signup_modal">SignUp</button></li>
+				<li class="nav-item"><a href= "#" class= "btn nav-link home-navig-link">Contact Us</a></li>
 			</ul>
 		</div>
 	</div>
@@ -77,19 +78,19 @@ div{ border:1px solid red; min-height:20px; }
 	</div>
 </div>
 
-{% include 'landing/login_modal.html' %}
-{% include 'landing/signup_modal.html' %}
+{% include 'home/login_modal.html' %}
+{% include 'home/signup_modal.html' %}
+{% endblock body %}
+
 
 {% block internal_script %}
 <script type= "text/javascript">
 /* This is to reativate signup modal if validation fails on serverside */
-var plink= {{ request.path }};
+var plink= '{{ request.path }}';
+
 $(document).ready(function(){
 	if (plink == '/signup/'){
-		$('#signup_modal').modal('show');
-	}
+		$('#signup_modal').modal('show');}
 });
-
 </script>
 {% endblock internal_script %}
-{% endblock body %}

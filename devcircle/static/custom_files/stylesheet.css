@@ -1,7 +1,7 @@
 /* This contains all the external styles for the dev-circle web application*/
 
-#logo{ height:70px; }
-.land-navig-link{ color:#1b9d46 !important; }
+.logo{ height:70px; }
+.home-navig-link{ color:#1b9d46 !important; }
 
 /* This controls the banner on the home page  */
 #home_banner{ 
@@ -9,4 +9,14 @@
 } 
 #banner_overlay{
 	background-color: rgba(0,0,0,0.3); height: 75vh;
+}
+
+/* This controls the container on the dev landing page  */
+.whitebg{
+	background-color: #fff;
+}
+
+/* This controls the appearance of the div of each group when you have to select a group from a list of groups  */
+.select_group:hover{
+	background-color: rgba(0,0,0,0.05);
 }

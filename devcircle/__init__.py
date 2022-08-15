@@ -9,5 +9,5 @@ db= SQLAlchemy(app)
 csrf= CSRFProtect(app)
 migrate= Migrate(app, db)
 
-from .routes import landing
+from .routes import index, landing, groups
 from . import models

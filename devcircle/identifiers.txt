@@ -1,15 +1,27 @@
 IDS
 Landing.html
 
-landingnavigation
-logo
+homenavigation
 home_banner
 banner_overlay
 login_modal
+new_choose_language
+show_groups
+land_choose_lang
+new_choose_group_col
+group_info
+group_id
+ginfo_join
+ginfo_link
+ginfo_name
+ginfo_type
+ginfo_desc
 
 
 
 CLASSES
-land-navig-link
+logo
+home-navig-link
 show_password
 eye_icon
+select_group

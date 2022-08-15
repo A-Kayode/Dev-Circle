@@ -1,0 +1,62 @@
+{% extends 'landing/base.html' %}
+
+{% block internal_styles %}
+<style>
+	div{border:1px solid red;}
+</style>
+{% endblock internal_styles %}
+
+{% block body %}
+<div class= "row whitebg" id= "new_choose_language">
+	<div class= "col">
+		{% if dlang == [] %}
+		<p>Welcome to Dev-Circle. Choose some languages to get started</p>
+		<form id= "land_choose_lang">
+			<div class= "row">
+				<div class= "col-3">
+					<input type= "checkbox" name= "language" value= "1">
+					<label class= "form-label">CSS</label>
+				</div>
+				<div class= "col-3">
+					<input type= "checkbox" name= "language" value= "2">
+					<label class= "form-label">HTML</label>
+				</div>
+				<div class= "col-3">
+					<input type= "checkbox" name= "language" value= "3">
+					<label class= "form-label">Javascript</label>
+				</div>
+				<div class= "col-3">
+					<input type= "checkbox" name= "language" value= "4">
+					<label class= "form-label">MySQL</label>
+				</div>
+				<div class= "col-3">
+					<input type= "checkbox" name= "language" value= "5">
+					<label class= "form-label">PHP</label>
+				</div>
+				<div class= "col-3">
+					<input type= "checkbox" name= "language" value= "6">
+					<label class= "form-label">PYTHON</label>
+				</div>
+			</div>
+			<input type= "hidden" name= "csrf_token" id= "csrf_token" value= {{csrf_token()}}>
+			<div>
+				<button class= "btn btn-primary rounded-pill" type= "button" onclick= "choose_language({{dev.dev_id}}, 'land_choose_lang')">Save</button>
+			</div>
+		</form>
+		{% else %}
+		<p>You have selected languages</p>
+		{% endif %}
+	</div>
+</div>
+
+
+<div class= "row" id= "show_groups" hidden>
+	<div class= "col" id= "new_choose_group_col"></div>
+	{% include 'landing/group_info_section.html' %}
+</div>
+
+
+{% endblock body %}
+
+{% block internal_scripts %}
+{% endblock internal_scripts %}
