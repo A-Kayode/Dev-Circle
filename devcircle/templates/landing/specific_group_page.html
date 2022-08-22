@@ -1,0 +1,206 @@
+{% extends 'landing/base.html' %}
+
+{% block internal_styles %}
+<style>
+	div{border: 0px solid red;}
+</style>
+{% endblock internal_styles %}
+
+{% block body %}
+<!-- This contains the group information -->
+<div class= "row whitebg mb-1">
+	<div class= "col">
+		<h2>{{g.grp_name}}</h2>
+		<p>{{g.grp_desc}}</p>
+		<p><i>This is a {{g.grp_type.name}} group</i></p>
+	</div>
+
+	<div class= "col">
+		<button class= "btn btn-outline-primary">Rules</button>
+		<button class= "btn btn-outline-danger" id= "ginfo_leave" onclick= "leave_group({{g.grp_id}})">Leave Group</button>
+		<button class= "btn btn-outline-success" id= "ginfo_join" onclick= "join_group({{g.grp_id}})">Join Group</button>
+	</div>
+</div>
+
+
+
+
+<!-- This contains the content of the group page -->
+<div class= "row">
+<!-- This contaisn the area to see all avalaible memebers -->
+<div class= "col-3 me-1">
+	<div class= "row whitebg mb-1">
+		<div class= "col">
+			<h5>Group Members</h5>
+			<form>
+				<div class= "row">
+				<div class= "col">
+					<input type= "radio" name= "member" id= "all_mems_radio" class= "mem_filter" checked>
+					<label for= "all_mems_radio">All</label>
+				</div>
+				<div class= "col">
+					<input type= "radio" name= "member" id= "avail_mems_radio" class= "mem_filter">
+					<label for= "avail_mems_radio">Available</label>
+				</div>
+			</div>
+			</form>
+		</div>
+	</div>
+
+	
+	<div class= "row"><div class= "col" id= "members_col">
+	{% if allmems != [] %}
+	{% for i in allmems %}
+
+	<div class= "row border-bottom all_mems_row whitebg">
+		<div class= "col">
+			<p class= "my-0">{{ i.developer.username }}</p>
+			<small><i>{{ i.task_availability.name }}</i></small>
+		</div>
+		<div class= "col">
+			<button class= "btn" data-bs-toggle="tooltip" data-bs-title="Send Message" onclick= "send_message_modal('{{i.developer.username}}', {{i.dev_id}})"><i class="fa-solid fa-envelope"></i></button>
+			{% if m != "" %}
+			{% if t %}
+			{% if i.task_availability.name == "available" %}
+			<button class= "btn" data-bs-toggle="tooltip" data-bs-title="Assign Project" onclick= "assign_project_modal({{g.grp_id}}, {{m.mem_id}}, {{i.mem_id}}, '{{i.developer.username}}')"><i class="fa-solid fa-plus"></i></button>
+			{% endif %}
+			{% endif %}
+			{% endif %}
+		</div>
+	</div>
+	{% endfor %}
+	{% endif %}
+
+	{% if availmems != [] %}
+	{% for i in availmems %}
+	<div class= "row border-bottom avail_mems_row whitebg" hidden>
+		<div class= "col">
+			<p class= "my-0">{{ i.developer.username }}</p>
+			<small><i>{{ i.task_availability.name }}</i></small>
+		</div>
+		<div class= "col">
+			<button class= "btn" data-bs-toggle="tooltip" data-bs-title="Send Message" onclick= "send_message_modal()"><i class="fa-solid fa-envelope"></i></button>
+			{% if m != "" %}
+			<button class= "btn" data-bs-toggle="tooltip" data-bs-title="Assign Project" onclick= "assign_project_modal({{g.grp_id}}, {{m.mem_id}}, {{i.mem_id}}, '{{i.developer.username}}')"><i class="fa-solid fa-plus"></i></button>
+			{% endif %}
+		</div>
+	</div>
+	{% endfor %}
+	{% endif %}</div></div>
+</div>
+
+
+<!-- This contains the area for posts -->
+<div class= "col-7">
+	{% if memb == 1 %}
+	<div class= "row whitebg mb-2">
+		<div class= "col">
+			<div class= "row">
+				<div class= "col">
+					<p>Picture area and username here</p>
+					<p>Make a post</p>
+					<form>
+						<div class= "mb-2">
+							<label class= "form-label">Title(optional)</label>
+							<input type= "text" name= "post_title" id= "post_title" class= "form-control">
+						</div>
+						<div class= "mb-1">
+							<textarea class= "form-control" style= "height:100px;" name= "devpost" id= "devpost" placeholder="Write post here."></textarea>
+						</div>
+						<div>
+							<button type= "button" class= "btn btn-success" onclick= "submit_post({{g.grp_id}}, {{m.mem_id}}, '{{csrf_token()}}', '{{request.path}}')">Post</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+
+
+
+	<div class= "row"><div class= "col post_container">
+	{% if posts != [] %}
+
+	{% for p in posts %}
+	<div class= "row whitebg mb-2">
+		<div class= "col">
+			<small class= "mb-1">(image here) {% if m != "" and p.poster.developer.username ==  m.developer.username%} You {% else %}{{p.poster.developer.username}} {% endif %} on {{p.date_posted.strftime('%d %b, %Y.  %H:%M')}}</small>
+			<h5>{{p.title}}</h5>
+			<p>{{p.post}}</p>
+		</div>
+	</div>
+	{% endfor %}
+
+	{% else %}
+	<div class= "row whitebg">
+		<div class= "col">
+			This group has no posts.
+			{% if memb == 1 %}
+			Be the first to add.
+			{% endif %}
+		</div>
+	</div>
+	{% endif %}
+	</div></div>
+</div>
+
+
+<!-- This contains to see the current contended and completed projects awaiting voting -->
+{% if memb == 1 %}
+<div class= "col ms-1">
+	{% if contend != [] %}
+	<div class= "row">
+		<div class= "col">
+			<div class= "row whitebg mb-1">
+				<div class= "col">
+					<h5>Contended Projects</h5>
+				</div>
+			</div>
+
+			{% for i in contend %}
+			<div class= "row whitebg mb-1 select_group" onclick= "contention_info({{i.task_id}})">
+				<div class= "col">
+					<p><b>Project Title: <br>{{i.task_title}}</b></p>
+					<p><b>Contended by: </b>{{i.assignee.developer.username}}</p>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+
+
+
+	<div class= "row">
+		<div class= "col">
+			<div class= "row">
+				<div class= "col"></div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}
+</div>
+
+{% include 'landing/assign_project_modal.html' %}
+{% include 'landing/contention_info_modal.html' %}
+{% include 'landing/send_messages_modal.html' %}
+{% endblock body %}
+
+
+{% block internal_scripts %}
+<script type= "text/javascript">
+var memb= {{memb}};
+$(document).ready(function(){
+	if (memb == 0){
+		$('#ginfo_join').removeClass('d-none');
+		$('#ginfo_leave').addClass('d-none');
+	}else{
+		$('#ginfo_leave').removeClass('d-none');
+		$('#ginfo_join').addClass('d-none');
+	}
+});	
+
+</script>
+{% endblock internal_scripts %}

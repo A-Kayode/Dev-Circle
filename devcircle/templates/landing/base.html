@@ -24,11 +24,12 @@
 		<div class= "col">
 			<ul class= "nav">
 				<li class= "nav-link"><a href= "{{url_for('dev_landing')}}" class= "btn btn-outline-success">Home</a></li>
-				<li class= "nav-link"><a href= "#" class= "btn btn-outline-success">Groups</a></li>
-				<li class= "nav-link"><a href= "#" class= "btn btn-outline-success">Projects</a></li>
-				<li class= "nav-link"><a href= "#" class= "btn btn-outline-success">Notifications</a></li>
-				<li class= "nav-link"><a href= "#" class= "btn btn-outline-success">Messages</a></li>
+				<li class= "nav-link"><a href= "{{url_for('all_groups')}}" class= "btn btn-outline-success">Groups</a></li>
+				<li class= "nav-link"><a href= "/projects/" class= "btn btn-outline-success">Projects</a></li>
+				<!-- <li class= "nav-link"><a href= "#" class= "btn btn-outline-success">Notifications</a></li> -->
+				<li class= "nav-link"><a href= "/messages/" class= "btn btn-outline-success">Messages</a></li>
 				<li class= "nav-link"><a href= "#" class= "btn btn-outline-success">Me</a></li>
+				<li class= "nav-link"><a href= "/logout/" class= "btn btn-outline-success">Logout</a></li>
 			</ul>
 		</div>
 	</div>
@@ -49,6 +50,11 @@
 <script src= "{{url_for('static', filename='libraries/jquery.js')}}" type= "text/javascript"></script>
 <script src= "{{url_for('static', filename='libraries/bootstrap/js/bootstrap.bundle.js')}}"></script>
 <script src= "/static/custom_files/custom_javascript.js"></script>
+<script type= "text/javascript">
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+</script>
 {% block internal_scripts %}
 {% endblock internal_scripts %}
 </body>

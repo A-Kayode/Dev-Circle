@@ -1,0 +1,34 @@
+{% extends 'landing/base.html' %}
+
+{% block body %}
+<div class= "row">
+	<div class= "col-3"></div>
+
+
+	<div class= "col">
+		{% if agrps != [] %}
+		{% for i in agrps %}
+		<div class= "row whitebg mb-1">
+			<div class= "col">
+				<a href= "/groups/{{i.group.grp_id}}/"><h3>{{i.group.grp_name}}</h3></a>
+				<small>Members: {{tomem[loop.index - 1]}}</small>
+			</div>
+		</div>
+		{% endfor %}
+		{% else %}
+		<div class= "row">
+			<div class= "col">
+				<h4>You have not joined any groups yet.</h4>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+
+
+	<div class= "col-2 ms-1 whitebg text-center" style= "height: 50px;">
+		<button class= "btn btn-success" data-bs-toggle= "modal" data-bs-target= "#create_group_modal">Create Group</button>
+	</div>
+</div>
+
+{% include 'landing/create_group_modal.html' %}
+{% endblock body %}

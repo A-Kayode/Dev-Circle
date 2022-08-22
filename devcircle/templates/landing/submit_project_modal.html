@@ -1,0 +1,40 @@
+<div class="modal fade" id="submit_project_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="">Submit Project</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class= "row">
+          <div class= "col">
+            <form id= "submit_project_form">
+              <div class= "mb-2">
+                <label class= "form-label">Github Link (full link)</label>
+                <input type= "text" name= "git_link" class= "form-control" id= "git_link">
+              </div>
+              <div class= "mb-2">
+                <label class= "form-label">Project URL(optional)</label>
+                <input type= "text" name= "url_link" class= "form-control">
+              </div>
+              <div>
+                <button type= "button" class= "btn btn-success" onclick= "
+                submit_project($('#submit_div_id').val());
+                ">Submit Project</button>
+              </div>
+              <input type= "hidden" name= "csrf_token" value= "{{csrf_token()}}" id= "csrf_token">
+              <input type= "hidden" name= "task_id" id= "submit_task_id">
+            </form>
+
+            <input type= "hidden" id= "submit_div_id">
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

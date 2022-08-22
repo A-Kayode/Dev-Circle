@@ -1,0 +1,50 @@
+<div class="modal fade" id="assign_project_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Assign Project</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class= "row">
+          <div class= "col">
+            <h6>Assign Project to <span id= "assignee_name"></span></h6>
+            <input type= "hidden" id= "hidden_assign_details">
+
+            <form>
+              <div class= "mb-2">
+                <label class= "form-label">Title</label>
+                <input type= "text" class= "form-control" name= "task_title" id= "task_title">
+              </div>
+              <div class= "mb-2">
+                <label class= "form-label">Description and Requirements</label>
+                <textarea class= "form-control" name= "task_desc" id= "task_desc"></textarea>
+              </div>
+              <div class= "mb-2 row">
+                <label class= "form-label">Duration</label>
+                <div class= "col">
+                  <input type= "number" name= "task_dur_num" id= "task_dur_num" class= "form-control">
+                </div>
+                <div class= "col">
+                  <select id= "task_dur_type" class= "form-select">
+                    <option value= "1">days</option>
+                    <option value= "7">weeks</option>
+                    <option value= "30">months</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class= "btn btn-info" onclick= "
+        var ids= $('#hidden_assign_details').val().split(' ');
+        assign_project(Number(ids[0]), Number(ids[1]), Number(ids[2]), '{{csrf_token()}}');
+        ">Assign Project</button>
+      </div>
+    </div>
+  </div>
+</div>

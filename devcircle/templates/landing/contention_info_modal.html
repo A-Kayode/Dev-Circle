@@ -1,0 +1,39 @@
+<div class="modal fade" id="contention_vote_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="">Vote on Contention</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class= "row">
+          <div class= "col">
+            <p><span><b id= "proj_assignee">Assignee name</b></span> is contesting a project assigned by <span><b id= "proj_assigner">Assigner name</b></span></p>
+            <p><b>Project Title: <span id= "proj_title"></span></b></p>
+            <p><b>Duration</b><span id= "proj_duration"></span></p>
+            <p><b>Description and Requirements</b></p>
+            <p id= "proj_description"></p>
+            <input type= "hidden" id= "contend_id">
+            <p><b></b><span></span></p>
+          </div>
+        </div>
+
+        <div class= "row">
+          <div class= "col">
+            <p><b>Is the project reasonable?</b></p>
+            <p>
+              <button class= "btn btn-outline-success" onclick= "voto_on_contention($('#contend_id').val(), 'yes', '{{csrf_token()}}', {{m.mem_id}})">Yes</button>
+              <button class= "btn btn-outline-danger" onclick= "voto_on_contention($('#contend_id').val(), 'no', '{{csrf_token()}}', {{m.mem_id}})">No</button>
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

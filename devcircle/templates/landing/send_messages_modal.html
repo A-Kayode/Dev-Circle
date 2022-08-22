@@ -1,0 +1,40 @@
+<div class="modal fade" id="send_messages_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="">Send Message to <span id= "correspondence_username"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class= "row justify-content-center">
+          <div class= "col-10">
+            <div class= "row mb-3">
+              <div class= "col" id= "correspondence_messages"></div>
+            </div>
+
+            <div class= row>
+              <div class= "col">
+                <form id= "send_message_form">
+                  <div class= "mb-2">
+                    <textarea class= "form-control" name= "message" id= "message_text"></textarea>
+                  </div>
+                  <input type= "hidden" id= "corres_id" name= 'corres_id'>
+                  <input type= "hidden" name= "csrf_token" id= "csrf_token" value= "{{csrf_token()}}">
+                  <div>
+                    <button type= "button" class= "btn btn-success" onclick= "send_message()">Send</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

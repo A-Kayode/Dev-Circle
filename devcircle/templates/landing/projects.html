@@ -1,0 +1,144 @@
+{% extends 'landing/base.html' %}
+
+{% block body %}
+<div class= "row whitebg mb-2">
+	<div class= "col text-center">
+		<button class= "btn btn-outline-primary" onclick= "show_proj_div('proj_ass_to_you')">Projects Assigned to You</button>
+		<button class= "btn btn-outline-primary" onclick= "show_proj_div('closed_proj')">Closed Projects</button>
+		<button class= "btn btn-outline-primary" onclick= "show_proj_div('proj_you_ass')">Projects You Assigned</button>
+	</div>
+</div>
+
+
+<div class= "row proj_div" id= "proj_ass_to_you">
+	<div class= "col">
+		<div class= "row whitebg mb-1">
+			<div class= "col text-center">
+				<h4>Projects Assigned to You</h4>
+			</div>
+		</div>
+		
+
+		{% if ass != [] %}
+		{% for i in ass %}
+		<div class= "row whitebg mb-2 py-2">
+			<div class= "col" id= "assigned_project{{i.task_id}}">
+				<h5>Title: {{i.task_title}}</h5>
+				<p><b>Assigned By: </b>{{i.assigner.developer.username}}</p>
+				<p><b>Group: </b>{{i.assigner.group.grp_name}}</p>
+				<p><b>Duration: </b>{{i.duration}} days</p>
+				<p><b>Status: </b>{{i.status.name}}</p>
+				{% if i.status.name == 'accepted' %}
+				<p><b>Deadline: </b>{{i.deadline.strftime('%d %b, %Y')}}</p>
+				{% endif %}
+				<p><b>Description and Requirements</b></p>
+				<p>{{i.task_desc}}</p>
+				{% if i.status.name == 'pending' %}
+				<button class= "btn btn-primary" id= "acceptbtn{{i.task_id}}" onclick= "accept_project({{i.task_id}}, '{{csrf_token()}}', 'assigned_project{{i.task_id}}', 'acceptbtn{{i.task_id}}')">Acknowledge</button>
+				{% if i.status.name != 'contended' %}
+				<button class= "btn btn-warning" id= "contendbtn{{i.task_id}}" onclick= "contend_project({{i.task_id}}, '{{csrf_token()}}', 'assigned_project{{i.task_id}}', 'contendbtn{{i.task_id}}')">Contend</button>
+				{% endif %}
+				{% endif %}
+				{% if i.status.name == 'accepted' %}
+				<button class= "btn btn-success" id= "submitbtn{{i.task_id}}" onclick= "submit_project_modal({{i.task_id}}, 'assigned_project{{i.task_id}}')">Submit Project</button>
+				{% endif %}
+			</div>
+		</div>
+		{% endfor %}
+		{% else %}
+		<div class= "row whitebg mb-2">
+			<div class= "col">
+				<p>You have no current projects assigned to you.</p>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+</div>
+
+
+
+<div class= "row proj_div" id= "closed_proj" hidden>
+	<div class= "col">
+		<div class= "row whitebg mb-2">
+			<div class= "col text-center">
+				<h4>Closed Projects</h4>
+			</div>
+		</div>
+
+
+		{% if com !=[] %}
+		{% for i in com %}
+		<div class= "row whitebg mb-2 py-2">
+			<div class= "col">
+				<h5>Title: {{i.task_title}}</h5>
+				<p><b>Assigned By: </b>{{i.assigner.developer.username}}</p>
+				<p><b>Group: </b>{{i.assigner.group.grp_name}}</p>
+				<p><b>Status: </b>{{i.status.name}}</p>
+				{% for j in sub %}
+				{% if i.task_id == j.task_id %}
+				<p><b>Github: </b><a href= "{{j.github}}">{{j.github}}</a></p>
+				<p><b>URL: </b><a href= "{{j.url}}">{{j.url}}</a></p>
+				{% endif %}
+				{% endfor %}
+				<p><b>Description and Requirements</b></p>
+				<p>{{i.task_desc}}</p>
+			</div>
+		</div>
+		{% endfor %}
+		{% else %}
+		<div class= "row whitebg mb-2">
+			<div class= "col">
+				<p>You have no closed or completed projects.</p>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+</div>
+
+
+
+<div class= "row proj_div" id= "proj_you_ass" hidden>
+	<div class= "col">
+		<div class= "row whitebg mb-2">
+			<div class= "col text-center">
+				<h4>Projects You Assigned</h4>
+			</div>
+		</div>
+
+
+		{% if pas != [] %}
+		{% for i in pas %}
+		<div class= "row whitebg mb-2 py-2">
+			<div class= "col">
+				<h5>Title: {{i.task_title}}</h5>
+				<p><b>Assigned To: </b>{{i.assignee.developer.username}}</p>
+				<p><b>Group: </b>{{i.assigner.group.grp_name}}</p>
+				<p><b>Duration: </b>{{i.duration}} days</p>
+				<p><b>Status: </b>{{i.status.name}}</p>
+				{% for j in sub %}
+				{% if i.task_id == j.task_id %}
+				<p><b>Github: </b><a href= "{{j.github}}">{{j.github}}</a></p>
+				<p><b>URL: </b><a href= "{{j.url}}">{{j.url}}</a></p>
+				{% endif %}
+				{% endfor %}
+				{% if i.status.name == 'accepted' %}
+				<p><b>Deadline: </b>{{i.deadline.strftime('%d %b, %Y')}}</p>
+				{% endif %}
+				<p><b>Description and Requirements</b></p>
+				<p>{{i.task_desc}}</p>
+			</div>
+		</div>
+		{% endfor %}
+		{% else %}
+		<div class= "row whitebg mb-2">
+			<div class= "col">
+				<p>You have not assigned any projects.</p>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+</div>
+
+
+{% include 'landing/submit_project_modal.html' %}
+{% endblock body %}

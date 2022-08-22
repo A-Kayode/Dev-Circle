@@ -1,5 +1,4 @@
 IDS
-Landing.html
 
 homenavigation
 home_banner
@@ -16,6 +15,44 @@ ginfo_link
 ginfo_name
 ginfo_type
 ginfo_desc
+ginfo_leave
+devpost
+post_title
+post_choosegroup
+members_col  --> Div on the specific group page that contains members of the group
+all_mems_radio
+avail_mems_radio
+assign_project_modal  --> modal to be used to assign projects
+assignee_name  --> span for name of user assigning project to
+hidden_assign_detail  --> input tag to keep some details we will need later in the assignment modal
+task_title --> input tag to fill out project title
+task_desc  --> textarea to fill out project description
+task_dur_num  --> input tag to select number of duration
+task_dur_type --> select tag to select type of duration
+proj_ass_to_you  --> projects assigned to you div
+closed_proj  --> closed projects div
+proj_you_ass  --> projects you assigned div
+contendbtn
+acceptbtn
+contention_vote_modal  --> Modal that show project for contention and where voting takes place
+proj_assignee --> id of assignee tag in contention modal
+proj_assigner  --> id of assigner tag in contention modal
+proj_title  --> id of project title tag in contention modal
+proj_duration  --> id of project duration tag in contention modal
+proj_description  --> if of project description tag in contention modal
+submit_task_id  --> id transfer input tag for submitting project
+submit_project_form
+submit_div_id\
+git_link
+correspondence_messages  --> This is like the container that will contain dev messages
+correspondence_username  --> This is used on the message span tag to contain username 
+corres_id  --> This is the id of the tag where correspondence id is kept
+send_message_form  --> This is the form for sending messages
+message_text
+create_group_rule_container  --> This is the container to add rules to when creating group
+remove_rule_btn  --> button used to remove rules when creating modal
+group_name_check_message  --> span used to keep message of result of checking unique group name
+create_group_form_submit_btn  --> button used to submit form to create group
 
 
 
@@ -24,4 +61,37 @@ logo
 home-navig-link
 show_password
 eye_icon
-select_group
+select_group  --> Used on divs to create hover effect on said divs.
+post_container
+mem_filter  --> For filtering members on specific group page
+avail_mems_row   --> Rows that contains available members of specific group
+all_mems_row  --> Rows that contain all members of specific group
+proj_div  --> Class used for hiding all project divs on projects page
+sent_text  --> This is used for colouring all the text that you sent.
+received_text  --> This is used for colouring all the text that you received.
+
+
+
+FUNCTIONS
+join_group() : Used to join a group
+get_info() : Retrieves information about a selected group and displays it
+choose_language() : Saves chosen languages for the developer and offers recommendation of groups
+login() : Verifies whether login credential are valid or not.
+leave_group() : Used to leave a group
+submit_post() : Used to submit a post, currently on only group page, plans to expand to landing page
+assign_project() : Used to assign projects to group members
+accept_project() : Used to acknowledge projects sent to you
+submit_project_modal() : Used to activate the modal used to submit projects sent to you
+submit_project() : Used to submit projects sent to you
+show_proj_div() : Used to show a particular set of projects on the projects page
+contend_project() : Used to contend projects assigned to you
+contention_info() : Used to bring up a modal that is used to vote on a contended project
+voto_on_contention() : Used to vote on a contended project.
+send_message_modal() : Used to open the modal to send messages to developers on the platform.
+send_message() : Used to send the message.
+add_rule() : Used to add rules when creating a group
+remove_rule() : Used to remove rules when creating a group
+check_group_name() : Used to check whether a group name is taken or not.
+
+Group that specializes in using Python to create RESTFUL APIs
+You must use MySQL for database interactions

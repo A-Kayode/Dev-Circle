@@ -1,0 +1,88 @@
+{% extends 'landing/base.html' %}
+
+{% block body %}
+<div class= "row">
+	<div class= "col-4 me-2" id= "messages_all_grp_members">
+		<div class= "row whitebg mb-2">
+			<div class= "col text-center">
+				<h4>All Group Members</h4>
+			</div>
+		</div>
+
+		{% if allm != [] %}
+		{% for a in allm %}
+		<div class= "row whitebg mb-2 select_group">
+			{% if a.developer.username != d.username %}
+			<div class= "col" onclick= "send_message_modal('{{a.developer.username}}', {{a.dev_id}})">
+				<p>{{a.developer.username}}</p>
+			</div>
+			{% endif %}
+		</div>
+		{% endfor %}
+		{% endif %}
+	</div>
+
+
+
+	<div class= "col">
+		<div class= "row whitebg mb-2">
+			<div class= 'col text-center'>
+				<h4>Your Conversations</h4>
+			</div>
+		</div>
+
+		{% if cor != [] %}
+		{% for c in cor %}
+		{% for m in msc %}
+		<div class= "row whitebg mb-1">
+			{% if c.dev_a != d.dev_id %}
+			{% if c.cor_id == m[0] %}
+			<div class= 'col select_group' onclick= "send_message_modal('{{c.first_dev.username}}', {{c.dev_a}})">
+				<div class= "row">
+					<div class= "col text-start">
+						<p>{{c.first_dev.username}}</p>
+					</div>
+					<div class= "col text-end">
+						<p>
+							
+							{{m[1]}} new messages
+							
+						</p>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+			{% endif %}
+			{% if c.dev_b != d.dev_id %}
+			{% if c.cor_id == m[0] %}
+			<div class= 'col select_group' onclick= "send_message_modal('{{c.second_dev.username}}', {{c.dev_b}})">
+				<div class= "row">
+					<div class= "col text-start">
+						<p>{{c.second_dev.username}}</p>
+					</div>
+					<div class= "col text-end">
+						<p>
+							
+							{{m[1]}} new messages
+							
+						</p>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+			{% endif %}
+		</div>
+		{% endfor %}
+		{% endfor %}
+		{% else %}
+		<div class= "row">
+			<div class= "col whitebg">
+				<p>You have shared no messages with anybody</p>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+</div>
+
+{% include 'landing/send_messages_modal.html' %}
+{% endblock body %}

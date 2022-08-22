@@ -1,0 +1,58 @@
+<div class="modal fade" id="create_group_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="">Create Group</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class= "row">
+          <div class= "col">
+            <form action= "/groups/creategroup/" method= "post">
+              <div class= "mb-2">
+                <label class= "form-label">Group Name</label>
+                <span id= "group_name_check_message"></span>
+                <input type= "text" name= "group_name" class= "form-control" id= "group_name" onchange= "check_group_name()">
+              </div>
+              <div class= "mb-2">
+                <label class= "form-label">Group Type</label>
+                <select name= "group_type" class= "form-select">
+                  <option value= "public">Public</option>
+                </select>
+              </div>
+              <div class= "mb-2">
+                <label class= "form-label">Languages</label>
+                <div class= "row">
+                  {% for l in lang %}
+                  <div class= "col-3">
+                    <input type= "checkbox" value= "{{l.lang_id}}" name= "group_languages">
+                    <label>{{l.lang_name}}</label>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+              <div class= "mb-2">
+                <label class= "form-label">Group Description</label>
+                <textarea name= "group_description" class= "form-control"></textarea>
+              </div>
+              <div class= "mb-2">
+                <label class= "form-label">Rules</label>
+                <div id= "create_group_rule_container"></div>
+                <button type= "button" class= "btn btn-outline-primary" onclick= "add_rule()">Add Rule</button>
+                <button type= "button" class= "btn btn-outline-danger" onclick= "remove_rule()" hidden id= "remove_rule_btn">Remove Rule</button>
+              </div>
+              <div>
+                <button class= "btn btn-success" id= "create_group_form_submit_btn" disabled>Create Group</button>
+              </div>
+              <input type= "hidden" name= "csrf_token" value= "{{csrf_token()}}">
+            </form>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

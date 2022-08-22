@@ -20,3 +20,16 @@
 .select_group:hover{
 	background-color: rgba(0,0,0,0.05);
 }
+
+/*This controls the appearance of the col div where all and the available group members are shown*/
+#members_col{
+	max-height: 75vh; overflow: auto;
+}
+
+/* This controls the colouring and adjustments of the divs that contain text that you send or receive */
+.sent_text{ background-color: rgba(71, 188, 69, 0.2); }
+.received_text{ background-color:rgba(227, 230, 220, 1.0); }
+#correspondence_messages{ overflow:auto; max-height: 60vh; }
+
+/* This is used to control the col that contains all group members on the messages page */
+#messages_all_grp_members{ max-height: 85vh; overflow: auto; }

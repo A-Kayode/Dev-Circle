@@ -1,15 +1,10 @@
 {% extends 'landing/base.html' %}
 
-{% block internal_styles %}
-<style>
-	div{border:1px solid red;}
-</style>
-{% endblock internal_styles %}
 
 {% block body %}
+{% if dlang == [] %}
 <div class= "row whitebg" id= "new_choose_language">
 	<div class= "col">
-		{% if dlang == [] %}
 		<p>Welcome to Dev-Circle. Choose some languages to get started</p>
 		<form id= "land_choose_lang">
 			<div class= "row">
@@ -43,14 +38,68 @@
 				<button class= "btn btn-primary rounded-pill" type= "button" onclick= "choose_language({{dev.dev_id}}, 'land_choose_lang')">Save</button>
 			</div>
 		</form>
-		{% else %}
-		<p>You have selected languages</p>
-		{% endif %}
 	</div>
 </div>
 
+{% else %}
 
-<div class= "row" id= "show_groups" hidden>
+<div class= "row whitebg mb-2">
+	<div class= "col">
+		<div class= "row">
+			<div class= "col">
+				<p>Picture area and username here</p>
+				<p>Make a post</p>
+				<form>
+					<div class= "mb-2">
+						<select class= "form-select" id= "post_choosegroup">
+							<option value= "">Choose Group</option>
+							{% if m != [] %}
+							{% for i in m %}
+							<option value= "{{i.grp_id}} {{i.mem_id}}">{{i.group.grp_name}}</option>
+							{% endfor %}
+							{% endif %}
+						</select>
+					</div>
+					<div class= "mb-2">
+						<label class= "form-label">Title(optional)</label>
+						<input type= "text" name= "post_title" id= "post_title" class= "form-control">
+					</div>
+					<div class= "mb-1">
+						<textarea class= "form-control" style= "height:100px;" name= "devpost" id= "devpost" placeholder="Write post here."></textarea>
+					</div>
+					<div>
+						<button type= "button" class= "btn btn-success" onclick= "
+						var value= $('#post_choosegroup').val();
+						var val= value.split(' ');
+						submit_post(Number(val[0]), Number(val[1]), '{{csrf_token()}}', '{{request.path}}');
+						">Post</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class= "row"><div class= "col post_container">
+{% if posts != [] %}
+{% for p in posts %}
+<div class= "row whitebg mb-2">
+	<div class= "col">
+		<small class= "mb-1">(image here) {% if p.poster.developer.username ==  dev.username %} You {% else %}{{p.poster.developer.username}} {% endif %} on {{p.date_posted.strftime('%d %b, %Y.  %H:%M')}}</small>
+		<h5>{{p.title}}</h5>
+		<p>{{p.post}}</p>
+		<small>Group: {{p.group.grp_name}}</small>
+	</div>
+</div>
+{% endfor %}
+{% endif %}
+</div></div>
+
+
+{% endif %}
+
+
+<div class= "row whitebg" id= "show_groups" hidden>
 	<div class= "col" id= "new_choose_group_col"></div>
 	{% include 'landing/group_info_section.html' %}
 </div>
