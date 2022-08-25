@@ -46,6 +46,10 @@ class Message_status(enum.Enum):
     new= "new message"
     read= "read message"
 
+class Member_status(enum.Enum):
+    joined= "Member joined group"
+    left= "Member left group"
+
 
 
 
@@ -97,6 +101,7 @@ class Member(db.Model):
     admin= db.Column(db.Enum(Is_admin), default=Is_admin.no.name)
     join_date= db.Column(db.DateTime(), default=func.now())
     task_availability= db.Column(db.Enum(Availability), default=Availability.available.name)
+    status= db.Column(db.Enum(Member_status), default= Member_status.joined.name)
 
     group= db.relationship('Group', backref='members')
     developer= db.relationship('Developer', backref='groups')
@@ -203,3 +208,28 @@ class Correspondence(db.Model):
 
     first_dev= db.relationship('Developer', backref='correspondence_1', foreign_keys=[dev_a])
     second_dev= db.relationship('Developer', backref='correspondence_2', foreign_keys=[dev_b])
+
+
+class Comment(db.Model):
+    com_id= db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    com_text= db.Column(db.Text(), nullable=False)
+    post_id= db.Column(db.Integer(), db.ForeignKey('post.post_id'))
+    dev_id= db.Column(db.Integer(), db.ForeignKey('developer.dev_id'))
+    com_like_no= db.Column(db.Integer(), default=0)
+
+    post= db.relationship('Post', backref="comments")
+    commenter= db.relationship('Developer', backref="comments")
+
+
+class Liker(db.Model):
+    liker_id= db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    com_id= db.Column(db.Integer(), db.ForeignKey('comment.com_id'))
+    dev_id= db.Column(db.Integer(), db.ForeignKey('developer.dev_id'))
+
+
+class Contact_messages(db.Model):
+    contact_id= db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    name= db.Column(db.String(255), nullable=False)
+    email= db.Column(db.String(255), nullable=False)
+    message= db.Column(db.Text(), nullable=False)
+    date_sent= db.Column(db.DateTime(), default=func.now())

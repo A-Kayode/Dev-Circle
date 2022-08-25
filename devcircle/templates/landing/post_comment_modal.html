@@ -1,0 +1,49 @@
+<div class="modal fade" id="post_comment_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+        <div class= "row mb-2">
+          <div class= "col">
+            <h4 id= "post_modal_post_title" class= "text-center">Post Title Here</h4>
+            <p id= "post_modal_post_content">Post itself here</p>
+          </div>
+        </div>
+
+        <div class= "row">
+          <div class= "col">
+            <h5 class= "text-center">Comments</h5>
+            {% if memb == 1 %}
+            <div class= "row mb-2">
+              <div class= "col">
+                <h6>Post Comment</h6>
+                <form  id= "post_comment_modal_make_comment">
+                  <div class= "mb-1">
+                    <textarea class= "form-control" name= "comment" id= "comment_text"></textarea>
+                  </div>
+                  <div>
+                    <button class= "btn btn-success btn-sm" onclick= "" id= "post_comment_modal_make_commentbtn" type= "button">Make Comment</button>
+                  </div>
+                  <input type= "hidden" name= "csrf_token" id= "csrf_token" value= "{{csrf_token()}}">
+                </form>
+              </div>
+            </div>
+            {% endif %}
+            <div class= 'row'>
+              <div class= "col" id= "post_modal_comment_container"></div>
+            </div>
+          </div>
+        </div>
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

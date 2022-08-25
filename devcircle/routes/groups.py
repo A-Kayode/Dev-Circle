@@ -8,15 +8,68 @@ from ..custom_functions import dev_validation
 @dev_validation
 def all_groups():
     did= session.get('dev_id')
-    agrps= Member.query.filter(Member.dev_id == did).all()
+    agrps= Member.query.filter(Member.dev_id == did, Member.status == "joined").all()
     lang= Language.query.all()
 
-    tomem= []
+    totalmem= []
     for i in agrps:
-        x= Member.query.filter(Member.grp_id == i.grp_id).count()
-        tomem.append(x)
+        x= Member.query.filter(Member.grp_id == i.grp_id, Member.status == "joined").count()
+        totalmem.append(x)
+    
+    #This is used to get group recommendations based on the languages chosen by the developer
+    #getting the languages registered by the user
+    dlo= db.session.execute(f"SELECT lang_id FROM dev_languages WHERE dev_id = '{did}'")
+    dllt= dlo.fetchall()
+    if dllt != []:
+        dl= []
+        for i in dllt:
+            dl.append(i[0])
+        dl= tuple(dl)
+    #getting the groups that use any of the fetched languages
+    if len(dl) == 1:
+        glo= db.session.execute(f"SELECT grp_id FROM grp_languages WHERE lang_id = {dl[0]} GROUP BY grp_id")
+    else:
+        glo= db.session.execute(f"SELECT grp_id FROM grp_languages WHERE lang_id IN {dl} GROUP BY grp_id")
+    glt= glo.fetchall()
+    if glt != None:
+        gl= []
+        for i in glt:
+            gl.append(i[0])
+    #weeeding out the groups that the developer is already part of
+    membership= Member.query.filter(Member.dev_id == did, Member.status == "joined").all()
+    if membership != []:
+        notgl= [i for i in gl]
+        for o in gl:
+            for i in membership:
+                if i.grp_id == o:
+                    notgl.remove(i.grp_id)
+        notgl2= tuple(notgl)
+    #get groups with the highest number of membership and limit to top 10 groups
+    if len(notgl2) == 1:
+        hgmo= db.session.execute(f"SELECT COUNT(grp_id) AS grp_no, grp_id FROM member WHERE grp_id = {notgl2[0]} AND status = 'joined' ORDER BY grp_no DESC LIMIT 10")
+    else:
+         hgmo= db.session.execute(f"SELECT COUNT(grp_id) AS grp_no, grp_id FROM member WHERE grp_id IN {notgl2} AND status = 'joined' ORDER BY grp_no DESC LIMIT 10")
+    hgmr= hgmo.fetchall()
+    print(hgmr)
+    hgm= []
+    if hgmr != [(0, None)]:
+        for i in hgmr:
+            hgm.append(i[1])
+    #get the records of groups that pass this criteria
+    rtotalmem= []
+    if hgm != []:
+        thgm= Group.query.filter(Group.grp_id.in_(hgm)).all()
+        for i in thgm:
+            y= Member.query.filter(Member.grp_id == i.grp_id, Member.status == "joined").count()
+            rtotalmem.append(y)
+    else:
+        thgm= Group.query.filter(Group.grp_id.in_(notgl)).all()
+        for i in thgm:
+            y= Member.query.filter(Member.grp_id == i.grp_id, Member.status == "joined").count()
+            rtotalmem.append(y)
 
-    return render_template('landing/groups.html', agrps=agrps, tomem=tomem, lang=lang)
+
+    return render_template('landing/groups.html', agrps=agrps, tomem=totalmem, lang=lang, thgm=thgm, rtotalmem=rtotalmem)
 
 
 @app.route('/groups/<int:gid>/')
@@ -27,7 +80,7 @@ def specific_group(gid):
     if g == None:
         abort(404)
 
-    mem= Member.query.filter(Member.dev_id == did, Member.grp_id == gid).first()
+    mem= Member.query.filter(Member.dev_id == did, Member.grp_id == gid, Member.status == "joined").first()
     if mem != None:
         memb= 1
         m= mem
@@ -39,10 +92,10 @@ def specific_group(gid):
     
     posts= Post.query.filter(Post.grp_id == gid).order_by(Post.date_posted.desc()).all()
     
-    allmems= Member.query.filter(Member.grp_id == gid, Member.dev_id != did).all()
-    avail_mems= Member.query.filter(Member.grp_id == gid, Member.task_availability == 'available', Member.dev_id != did).all()
+    allmems= Member.query.filter(Member.grp_id == gid, Member.dev_id != did, Member.status == "joined").all()
+    avail_mems= Member.query.filter(Member.grp_id == gid, Member.task_availability == 'available', Member.dev_id != did, Member.status == "joined").all()
 
-    am= Member.query.filter(Member.dev_id == did).all()
+    am= Member.query.filter(Member.dev_id == did, Member.status == "joined").all()
     amem= []
     if am != []:
         for i in am:
@@ -57,7 +110,10 @@ def specific_group(gid):
     #code to trieve contended projects in the particular group
     contend= Task.query.filter(Task.grp_id == gid, Task.status == 'contended').all()
 
-    return render_template('landing/specific_group_page.html', g=g, memb=memb, m=m, posts=posts, availmems=avail_mems, allmems=allmems, t=t, contend=contend)
+    #retrieving all the rules of the group
+    rule= Rule.query.filter(Rule.grp_id == gid).all()
+
+    return render_template('landing/specific_group_page.html', g=g, memb=memb, m=m, posts=posts, availmems=avail_mems, allmems=allmems, t=t, contend=contend, rules=rule)
 
 
 @app.route('/groups/ajax/joingroup/')
@@ -66,8 +122,12 @@ def join_group():
     gid= request.args.get('grp_id')
     did= session.get('dev_id')
     try:
-        mem= Member(dev_id=did, grp_id=gid)
-        db.session.add(mem)
+        chkmem= Member.query.filter(Member.grp_id == gid, Member.dev_id == did).first()
+        if chkmem != None:
+            chkmem.status = "joined"
+        else:
+            mem= Member(dev_id=did, grp_id=gid)
+            db.session.add(mem)
     except:
         db.session.rollback()
         return jsonify(status=0, message="An error occurred. Please try again later")
@@ -83,7 +143,7 @@ def leave_group():
     gid= request.args.get('grp_id')
     try:
         mem= Member.query.filter(Member.dev_id == did, Member.grp_id == gid).first()
-        db.session.delete(mem)
+        mem.status = "left"
     except:
         db.session.rollback
         return jsonify(status=0, message="An error occurred. Please try again later")

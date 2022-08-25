@@ -1,9 +1,42 @@
 from datetime import datetime, timedelta, date
 from flask import render_template, request, session, flash, redirect, jsonify
-from .. import app
+from .. import app, scheduler
 from ..models import *
 from ..custom_functions import dev_validation
 
+
+#scheduled tasks
+@scheduler.task('interval', id='contention_check', hours=12, start_date=datetime.now())
+def contention_check():
+    #retrieve all contentions
+    cont= Contention.query.filter(Contention.state == "active").all()
+    if cont != []:
+        #check for contentions that have closed
+        for i in cont:
+            if i.closing_date < date.today():
+                #check the number of yes and no votes and compare them
+                yv= Con_votes.query.filter(Con_votes.issue_id == i.con_id, Con_votes.vote == "yes").count()
+                nv= Con_votes.query.filter(Con_votes.issue_id == i.con_id, Con_votes.vote == "no").count()
+                #activate or cancel project depending on ratio of yes and no votes
+                if nv > yv:
+                    i.state= "succeeded"
+                    i.task.status= "cancelled"
+                    dev= i.task.assignee.dev_id
+                    mem= Member.query.filter(Member.dev_id == dev).all()
+                    for j in mem:
+                        j.task_availability= "available"
+                    db.session.commit()
+                else:
+                    i.state= "failed"
+                    i.task.status= "accepted"
+                    i.task.deadline= date.today() + timedelta(days=i.task.duration)
+                    db.session.commit()
+
+
+
+
+
+#routes
 @app.route('/projects/ajax/assignproject/', methods=['POST', 'GET'])
 @dev_validation
 def assign_project():
@@ -17,6 +50,7 @@ def assign_project():
     tm= Member.query.get(tmem)
     tmdet= tm.developer.username
     tdid= tm.dev_id
+
 
     try:
         t= Task(grp_id=gid, from_mem=fmem, to_mem=tmem, task_title=p_title, task_desc=p_desc, duration=dur)
@@ -46,7 +80,7 @@ def projects():
             mem.append(i.mem_id)
 
     ass= Task.query.filter(Task.to_mem.in_(mem), Task.status.in_(['pending', 'accepted', 'contended', 'late'])).all()
-    com= Task.query.filter(Task.to_mem.in_(mem), Task.status.in_(['expired', 'completed'])).order_by(Task.date_assigned.desc()).all()
+    com= Task.query.filter(Task.to_mem.in_(mem), Task.status.in_(['expired', 'completed', 'cancelled'])).order_by(Task.date_assigned.desc()).all()
     pas= Task.query.filter(Task.from_mem.in_(mem)).order_by(Task.date_assigned.desc()).all()
     pas2= Task.query.filter(Task.from_mem.in_(mem), Task.status == "completed").all()
 
@@ -78,6 +112,25 @@ def accept_project():
     db.session.commit()
 
     return jsonify(status=1, message="Done", deadline=task.deadline.strftime("%d %b, %Y"))
+
+
+@app.route('/projects/ajax/cancelproject/', methods=['POST', 'GET'])
+@dev_validation
+def cancel_project():
+    tid= request.form.get('task_id')
+    try:
+        task= Task.query.get(tid)
+        task.status= 'cancelled'
+        adid= task.assignee.dev_id
+        am= Member.query.filter(Member.dev_id == adid).all()
+        for i in am:
+            i.task_availability= "available"
+    except:
+        db.session.rollback()
+        return jsonify(status=0, message="An error occured. Please try again later")
+    db.session.commit()
+
+    return jsonify(status=1, message="Done")
 
 
 @app.route('/projects/ajax/contendproject/', methods=['POST', 'GET'])

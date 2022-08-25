@@ -5,10 +5,10 @@
 
 /* This controls the banner on the home page  */
 #home_banner{ 
-	background-image: url("../images/computers.jpg"); height:75vh; background-size: 100% 100%;
+	background-image: url("../images/computers.jpg"); height:65vh; background-size: 100% 100%;
 } 
 #banner_overlay{
-	background-color: rgba(0,0,0,0.3); height: 75vh;
+	background-color: rgba(0,0,0,0.6); height: 65vh;
 }
 
 /* This controls the container on the dev landing page  */
@@ -33,3 +33,20 @@
 
 /* This is used to control the col that contains all group members on the messages page */
 #messages_all_grp_members{ max-height: 85vh; overflow: auto; }
+
+/* This controls the heading and text  */
+#home_welcome_heading{ font-size: 3.5em; color: rgb(71, 188, 69);}
+.home_banner_text{ font-size: 1.5em; }
+.home_normal_text{ font-size: 2.0em; }
+
+/* This controls the footer */
+#footer_area{ height:25vh; background-color: rgba(36, 38, 86, 1.0); }
+
+/* This is just to quickly style the links to specific groups on the groups page */
+#visit_group_link{ text-decoration: none;}
+
+/* This controls the specific group page */
+#grp_desc_area{ background-color: rgba(0, 168, 93, 0.15); }
+
+/* The 'me' page */
+.yellowish_area{ background-color: rgba(224, 225, 102, 1.0); }

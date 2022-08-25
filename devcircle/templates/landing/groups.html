@@ -2,17 +2,49 @@
 
 {% block body %}
 <div class= "row">
-	<div class= "col-3"></div>
+	<div class= "col-3 me-2">
+		<div class= "row bg-success text-light pb-2">
+			<div class= "col text-center">
+				<h5>Recommended Groups</h5>
+			</div>
+		</div>
+
+		{% if thgm != [] %}
+		{% for i in thgm %}
+		<div class= "row whitebg mb-2">
+			<div class= "col">
+				<p>{{ i.grp_name }}</p>
+				<small>Members: {{rtotalmem[loop.index - 1]}}</small>
+				<div>
+					<a href= "/groups/{{i.grp_id}}/" class= "btn btn-secondary">Visit Group</a>
+					<button class= "btn btn-outline-danger ginfo_leave" id= "leave_{{i.grp_id}}" onclick= "leave_group({{i.grp_id}}, 'leave_{{i.grp_id}}', 'join_{{i.grp_id}}')">Leave Group</button>
+					<button class= "btn btn-outline-success ginfo_join" id= "join_{{i.grp_id}}" onclick= "join_group({{i.grp_id}}, 'leave_{{i.grp_id}}', 'join_{{i.grp_id}}')">Join Group</button>
+				</div>
+
+			</div>
+		</div>
+		{% endfor %}
+		{% else %}
+		<div class= "row">
+			<div class= "col">
+				<p><b>There are no groups to recommend currently</b></p>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+
 
 
 	<div class= "col">
 		{% if agrps != [] %}
 		{% for i in agrps %}
-		<div class= "row whitebg mb-1">
-			<div class= "col">
-				<a href= "/groups/{{i.group.grp_id}}/"><h3>{{i.group.grp_name}}</h3></a>
-				<small>Members: {{tomem[loop.index - 1]}}</small>
-			</div>
+		<div class= "row whitebg mb-1 select_group">
+			<a href= "/groups/{{i.group.grp_id}}/" id= "visit_group_link">
+				<div class= "col">
+					<h3>{{i.group.grp_name}}</h3>
+					<small style= "color:black">Members: {{tomem[loop.index - 1]}}</small>
+				</div>
+			</a>
 		</div>
 		{% endfor %}
 		{% else %}
@@ -25,10 +57,20 @@
 	</div>
 
 
-	<div class= "col-2 ms-1 whitebg text-center" style= "height: 50px;">
+	<div class= "col-2 ms-2 whitebg text-center" style= "height: 50px;">
 		<button class= "btn btn-success" data-bs-toggle= "modal" data-bs-target= "#create_group_modal">Create Group</button>
 	</div>
 </div>
 
 {% include 'landing/create_group_modal.html' %}
 {% endblock body %}
+
+{% block internal_scripts %}
+<script type= "text/javascript">
+$(document).ready(function(){
+	$('.ginfo_join').removeClass('d-none');
+	$('.ginfo_leave').addClass('d-none');
+});	
+
+</script>
+{% endblock internal_scripts %}

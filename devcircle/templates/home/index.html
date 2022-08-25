@@ -2,18 +2,18 @@
 
 {% block internal_styles %}
 <style>
-div{ border:1px solid red; min-height:20px; }
+div{ border:0px solid red; min-height:20px; }
+body{ background-color: #eee; }
 
 </style>
 {% endblock internal_styles %}
 
 {% block body %}
-{{request.path}}
-<div class= "container">
+<div class= "container" style="background-color:#fff">
 	<div class= "row align-items-center">
 		<div class= "col">
 			<h2>
-				<img src= "/static/images/dev_circle.png" alt= "devcircle logo" class= "logo">
+				<a href= "/"><img src= "/static/images/dev_circle.png" alt= "devcircle logo" class= "logo"></a>
 			</h2>
 		</div>
 
@@ -22,7 +22,7 @@ div{ border:1px solid red; min-height:20px; }
 				<li class="nav-item"><a href= "/" class= "btn nav-link home-navig-link">Home</a></li>
 				<li class="nav-item"><button class= "btn home-navig-link" data-bs-toggle= "modal" data-bs-target= "#login_modal">Login</button></li>
 				<li class="nav-item"><button class= "btn home-navig-link" data-bs-toggle= "modal" data-bs-target= "#signup_modal">SignUp</button></li>
-				<li class="nav-item"><a href= "#" class= "btn nav-link home-navig-link">Contact Us</a></li>
+				<li class="nav-item"><button class= "btn home-navig-link" data-bs-toggle= "modal" data-bs-target= "#contact_modal">Contact Us</button></li>
 			</ul>
 		</div>
 	</div>
@@ -30,15 +30,15 @@ div{ border:1px solid red; min-height:20px; }
 
 
 
-	<div class= "row">
+	<div class= "row mb-5">
 		<div class= "col" id= "home_banner">
 			<div class= "row">
 				<div class= "col" id= "banner_overlay">
-					<div class= "row">
+					<div class= "row align-items-center" style= "height:inherit;">
 						<div class= "col" style= "color: white">
-							<h2>New to Software Development? Never Feel Alone Again!</h2>
-							<p>DEV-CIRCLE connects you to new and experienced software developers all over the world.</p>
-							<p>Share posts, messages, problems and even tasks with fellow developers about the languages that makes you most excited.</p>
+							<h2 id= "home_welcome_heading" class= "text-center">New to Software Development? Never Feel Alone Again!</h2>
+							<p class= "text-center home_banner_text"><span style= "color: rgb(71, 188, 69);">DEV-CIRCLE</span> connects you to new and experienced software developers all over the world.</p>
+							<p class= "text-center home_banner_text">Share posts, messages, problems and even tasks with fellow developers about the languages that makes you the most excited.</p>
 						</div>
 					</div>
 				</div>
@@ -50,10 +50,10 @@ div{ border:1px solid red; min-height:20px; }
 
 
 
-	<div class= "row">
-		<div class= "col">
-			<p>Join and Create Groups where you interact with developers that share your interest.</p>
-			<p>Want a place to hangout with you friends, create a private group just for that. Your rules, your way.</p>
+	<div class= "row justify-content-center p-5 mb-5 buttom-border" style= "background-color: rgba(71, 188, 69, 0.08);">
+		<div class= "col-10">
+			<p class= "text-center home_normal_text">Join and Create Groups where you interact with developers that share your interest.</p>
+			<p class= "text-center home_normal_text">Want a place to hangout with you friends, simply create a group just for that. Your set the rules.</p>
 		</div>
 	</div>
 
@@ -61,36 +61,21 @@ div{ border:1px solid red; min-height:20px; }
 
 
 
-	<div class= "row">
-		<div class= "col">
-			<p>Sharpens your skills, assign tasks and projects to your group memebers. </p>
+	<div class= "row justify-content-center p-5 mb-5 buttom-border" style= "background-color: rgba(170, 76, 169, 0.08);">
+		<div class= "col-10">
+			<p class= "text-center home_normal_text">Sharpens your skills, assign tasks and projects to your group memebers. </p>
 		</div>
 	</div>
 
 
-
-
-
-	<div class= "row">
-		<div class= "col">
-			<p>This is the footer area</p>
-		</div>
-	</div>
+	{% include 'home/footer.html' %}
 </div>
 
 {% include 'home/login_modal.html' %}
 {% include 'home/signup_modal.html' %}
+{% include 'home/contact_modal.html' %}
 {% endblock body %}
 
 
 {% block internal_script %}
-<script type= "text/javascript">
-/* This is to reativate signup modal if validation fails on serverside */
-var plink= '{{ request.path }}';
-
-$(document).ready(function(){
-	if (plink == '/signup/'){
-		$('#signup_modal').modal('show');}
-});
-</script>
 {% endblock internal_script %}

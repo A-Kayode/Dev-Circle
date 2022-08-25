@@ -8,15 +8,15 @@
 
 {% block body %}
 <!-- This contains the group information -->
-<div class= "row whitebg mb-1">
-	<div class= "col">
+<div class= "row whitebg mb-1" id= "grp_desc_area">
+	<div class= "col-7">
 		<h2>{{g.grp_name}}</h2>
 		<p>{{g.grp_desc}}</p>
 		<p><i>This is a {{g.grp_type.name}} group</i></p>
 	</div>
 
-	<div class= "col">
-		<button class= "btn btn-outline-primary">Rules</button>
+	<div class= "col text-end">
+		<button class= "btn btn-outline-primary" data-bs-toggle= "modal" data-bs-target= "#group_rules_modal">Rules</button>
 		<button class= "btn btn-outline-danger" id= "ginfo_leave" onclick= "leave_group({{g.grp_id}})">Leave Group</button>
 		<button class= "btn btn-outline-success" id= "ginfo_join" onclick= "join_group({{g.grp_id}})">Join Group</button>
 	</div>
@@ -31,7 +31,7 @@
 <div class= "col-3 me-1">
 	<div class= "row whitebg mb-1">
 		<div class= "col">
-			<h5>Group Members</h5>
+			<h5 class= 'text-center'>Group Members</h5>
 			<form>
 				<div class= "row">
 				<div class= "col">
@@ -123,8 +123,8 @@
 	{% if posts != [] %}
 
 	{% for p in posts %}
-	<div class= "row whitebg mb-2">
-		<div class= "col">
+	<div class= "row whitebg mb-2 select_group">
+		<div class= "col" onclick= "view_post({{p.post_id}}, {{p.group.grp_id}}, {{p.poster.mem_id}})">
 			<small class= "mb-1">(image here) {% if m != "" and p.poster.developer.username ==  m.developer.username%} You {% else %}{{p.poster.developer.username}} {% endif %} on {{p.date_posted.strftime('%d %b, %Y.  %H:%M')}}</small>
 			<h5>{{p.title}}</h5>
 			<p>{{p.post}}</p>
@@ -149,15 +149,16 @@
 <!-- This contains to see the current contended and completed projects awaiting voting -->
 {% if memb == 1 %}
 <div class= "col ms-1">
+	<div class= "row whitebg mb-1">
+		<div class= "col text-center">
+			<h5>Contended Projects</h5>
+		</div>
+	</div>
+
+
 	{% if contend != [] %}
 	<div class= "row">
 		<div class= "col">
-			<div class= "row whitebg mb-1">
-				<div class= "col">
-					<h5>Contended Projects</h5>
-				</div>
-			</div>
-
 			{% for i in contend %}
 			<div class= "row whitebg mb-1 select_group" onclick= "contention_info({{i.task_id}})">
 				<div class= "col">
@@ -186,6 +187,8 @@
 {% include 'landing/assign_project_modal.html' %}
 {% include 'landing/contention_info_modal.html' %}
 {% include 'landing/send_messages_modal.html' %}
+{% include 'landing/post_comment_modal.html' %}
+{% include 'landing/group_rules_modal.html' %}
 {% endblock body %}
 
 

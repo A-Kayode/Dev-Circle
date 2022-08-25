@@ -24,8 +24,9 @@
           </div>
           <div class= "mb-2">
             <label class= "form-label">Username</label>
+            <div><span id= "username_message"></span></div>
             <span style= "color:red">{{ Signup.username.errors[0] }}</span>
-            {{ Signup.username(class_="form-control") }}
+            {{ Signup.username(class_="form-control", onchange="check_username()") }}
           </div>
           <div class= "mb-2">
             <label class= "form-label">Password</label>
@@ -36,7 +37,7 @@
             </div>
           </div>
           <div>
-            <button class= "btn btn-success">Submit</button>
+            <button class= "btn btn-success check_username_btn" disabled>Submit</button>
           </div>
           {{ Signup.csrf_token }}
         </form>

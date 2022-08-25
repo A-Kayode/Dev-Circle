@@ -53,6 +53,23 @@ create_group_rule_container  --> This is the container to add rules to when crea
 remove_rule_btn  --> button used to remove rules when creating modal
 group_name_check_message  --> span used to keep message of result of checking unique group name
 create_group_form_submit_btn  --> button used to submit form to create group
+post_modal_comment_container  --> container that will contain all the comments for a post.
+post_modal_post_content  --> tag to keep the content of the post in the modal
+post_modal_post_title  --> tag to keep the title of the post in the modal
+post_comment_modal_make_commentbtn  --> button to add the comment
+comment_text  --> the text are that contains the comment itself to be made
+like_no  --> stores the number of likes a comment has.
+username  --> input tag used for changing or adding username
+username_message  --> span tag that will contain message on checking username
+me_developer_username  --> tag that holds username on me page
+change_pswd_form  --> form for changing your password on the me page
+group_rules_modal  --> modal to view the rules of a specified group
+home_welcome_heading  --> id to control the size of the heading text on home page
+contact_message  --> tag to receive confirmation of message sent
+contact_form  --> form id of contact us modal
+grp_desc_area  --> area that contains the information about a particular group
+
+
 
 
 
@@ -69,6 +86,12 @@ all_mems_row  --> Rows that contain all members of specific group
 proj_div  --> Class used for hiding all project divs on projects page
 sent_text  --> This is used for colouring all the text that you sent.
 received_text  --> This is used for colouring all the text that you received.
+check_username_btn  --> Used for disabling the buttons on checking for unique username
+home_banner_text  --> used for controlling text on the main home banner
+footer_area  --> footer area
+
+
+
 
 
 
@@ -92,6 +115,9 @@ send_message() : Used to send the message.
 add_rule() : Used to add rules when creating a group
 remove_rule() : Used to remove rules when creating a group
 check_group_name() : Used to check whether a group name is taken or not.
-
-Group that specializes in using Python to create RESTFUL APIs
-You must use MySQL for database interactions
+view_post() : used to view the post selected and it's comments.
+make_comment() : used for adding comments to the post.
+like_comment() : used for liking comments
+check_username() : used for checking whether username is taken or not.
+change_username() : used for changing the username of the developer
+contact_us() : This is used to send contact message

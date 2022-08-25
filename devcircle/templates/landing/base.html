@@ -18,7 +18,7 @@
 <div class= "container">
 	<div class= "row align-items-end whitebg">
 		<div class= "col-4">
-			<img src= "/static/images/dev_circle.png" alt= "devcircle logo" class= "logo">
+			<a href= "/"><img src= "/static/images/dev_circle.png" alt= "devcircle logo" class= "logo"></a>
 		</div>
 
 		<div class= "col">
@@ -28,7 +28,7 @@
 				<li class= "nav-link"><a href= "/projects/" class= "btn btn-outline-success">Projects</a></li>
 				<!-- <li class= "nav-link"><a href= "#" class= "btn btn-outline-success">Notifications</a></li> -->
 				<li class= "nav-link"><a href= "/messages/" class= "btn btn-outline-success">Messages</a></li>
-				<li class= "nav-link"><a href= "#" class= "btn btn-outline-success">Me</a></li>
+				<li class= "nav-link"><a href= "{{url_for('me')}}" class= "btn btn-outline-success">Me</a></li>
 				<li class= "nav-link"><a href= "/logout/" class= "btn btn-outline-success">Logout</a></li>
 			</ul>
 		</div>

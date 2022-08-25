@@ -45,6 +45,7 @@ function choose_language(dev_id, form_id){
 	var form = document.getElementById(form_id);
 	var formdata= new FormData(form);
 	formdata.append("dev_id",dev_id);
+	formdata.append("form_id",form_id);
 
 	$.ajax({
 		url:'/landing/ajax/savelanguages/',
@@ -53,18 +54,22 @@ function choose_language(dev_id, form_id){
 		type:'post',
 		success:function(rsp){
 			if (rsp.status == 1){
-				console.log(rsp.glang);
+				if(form_id == 'land_choose_lang'){
+					console.log(rsp.glang);
+					var grp_div= ""
+					rsp.glang.forEach((val,key) => {
+						grp_div += `<div class= "row whitebg m-1 select_group" onclick="get_info(${val[2]})"><div class= "col">`
+						grp_div += `<h3>${val[0]}</h3><p>${val[1]}</p>`
+						grp_div += `</div></div>`
+					});
 
-				var grp_div= ""
-				rsp.glang.forEach((val,key) => {
-					grp_div += `<div class= "row whitebg m-1 select_group" onclick="get_info(${val[2]})"><div class= "col">`
-					grp_div += `<h3>${val[0]}</h3><p>${val[1]}</p>`
-					grp_div += `</div></div>`
-				});
-
-				$('#new_choose_group_col').html(grp_div);
-				$('#new_choose_language').prop('hidden', true);
-				$('#show_groups').prop('hidden', false);
+					$('#new_choose_group_col').html(grp_div);
+					$('#new_choose_language').prop('hidden', true);
+					$('#show_groups').prop('hidden', false);
+				}else if(form_id == 'me_choose_lang'){
+					alert("Chosen Languages have been saved.")
+				}
+				
 
 			}
 		},
@@ -114,7 +119,7 @@ function get_info(id){
 
 
 /* This code is used to join groups */
-function join_group(gid){
+function join_group(gid, rgbtnid="a", rgbtnid2="a"){
 	$.ajax({
 		url:'/groups/ajax/joingroup/',
 		data:{'grp_id':gid},
@@ -125,7 +130,9 @@ function join_group(gid){
 				alert(rsp.message);
 			}else if(rsp.status == 1){
 				$('#ginfo_join').toggleClass('d-none');
+				$('#' + rgbtnid).toggleClass('d-none');
 				$('#ginfo_leave').toggleClass('d-none');
+				$('#' + rgbtnid2).toggleClass('d-none');
 			}
 		},
 		error:function(err){console.log(err);}
@@ -134,7 +141,7 @@ function join_group(gid){
 
 
 /* This code is used to leave groups */
-function leave_group(gid){
+function leave_group(gid, rgbtnid="a", rgbtnid2="a"){
 	$.ajax({
 		url:'/groups/ajax/leavegroup/',
 		data:{'grp_id':gid},
@@ -145,7 +152,9 @@ function leave_group(gid){
 				alert(rsp.message);
 			}else if(rsp.status == 1){
 				$('#ginfo_join').toggleClass('d-none');
+				$('#' + rgbtnid).toggleClass('d-none');
 				$('#ginfo_leave').toggleClass('d-none');
+				$('#' + rgbtnid2).toggleClass('d-none');
 			}
 		},
 		error:function(err){console.log(err);}
@@ -260,6 +269,26 @@ function accept_project(tid, token, div_id, btn_id){
 				var dead= `<p><b>Deadline: </b>${rsp.deadline}</p>`
 				$(`#${div_id}`).append(dead);
 				$(`#${btn_id}`).text('Acknowledged');
+			}
+			
+		},
+		error:function(err){console.log(err);}
+	});
+}
+
+
+/* This code is used cancel projects you assigned */
+function cancel_project(tid, token, btn_id){
+	$.ajax({
+		url:'/projects/ajax/cancelproject/',
+		data:{'task_id':tid, 'csrf_token':token},
+		type:'post',
+		dataType:'json',
+		success:function(rsp){
+			if(rsp.status == 0){
+				alert(rsp.message);
+			}else if(rsp.status == 1){
+				$(`#${btn_id}`).text('Cancelled');
 			}
 			
 		},
@@ -397,8 +426,8 @@ function send_message_modal(user, dev_id){
 			if(rsp.status == 2){
 				var msg= ""
 				rsp.allcor.forEach((val,key)=>{
-					msg += `<div class= "row mb-2">`;
-					(val[0] == 1) ? msg += `<div class= "col sent_text">` : msg += `<div class= "col received_text">`;
+					msg += `<div class= "row mb-3">`;
+					(val[0] == 1) ? msg += `<div class= "col-10 offset-2 sent_text">` : msg += `<div class= "col-10 received_text">`;
 					msg += `<p>${val[1]}</p><small><i>Sent: ${val[2]}</i></small></div></div>`;
 				})
 				$('#correspondence_messages').html(msg);	
@@ -430,7 +459,7 @@ function send_message(){
 		dataType:'json',
 		success:function(rsp){
 			if(rsp.status == 1){
-				var text= `<div class= "row mb-2"><div class= "col sent_text"><p>${$('#message_text').val()}</p><small><i>Sent: now</i></small></div></div>`;
+				var text= `<div class= "row mb-3"><div class= "col-10 offset-2 sent_text"><p>${$('#message_text').val()}</p><small><i>Sent: now</i></small></div></div>`;
 				$('#correspondence_messages').append(text);
 				$('#message_text').val("");
 				setTimeout(function(){
@@ -486,4 +515,209 @@ function check_group_name(){
 		},
 		error:function(err){console.log(err);}
 	});
+}
+
+
+/* This code is used to view posts */
+function view_post(post, grp, poster){
+	$.ajax({
+		url:'/posts/ajax/retrivepost/',
+		data:{"post_id":post, "grp_id":grp, "poster_id":poster},
+		type:'get',
+		dataType:'json',
+		success:function(rsp){
+			console.log(rsp);
+			$('#post_modal_post_title').text(rsp.post[0]);
+			$('#post_modal_post_content').text(rsp.post[1]);
+			$('#post_comment_modal_make_commentbtn').attr('onclick', `make_comment(${rsp.post[2]})`);
+			if(rsp.com_status == 1){
+				var com= ""
+				rsp.comments.forEach((val,key)=>{
+					com += `<div class= "row mb-1 border-top border-bottom" style= "background-color:#eee;"><div class= "col">
+								<small>${val[1]}</small>
+								<p>${val[0]}</p>
+								<small><span id= "like_no${val[3]}">${val[2]}</span> likes. </small>
+								<button class= "btn" onclick= "like_comment(${val[3]})"><i class="fa-solid fa-thumbs-up"></i></button>
+							</div></div>`;
+				});
+				$('#post_modal_comment_container').html(com);
+				
+			}else{
+				var com= `<p>This post has no comments</p>`;
+				$('#post_modal_comment_container').html(com);
+			}
+
+			$('#post_comment_modal').modal('show');
+		},
+		error:function(err){console.log(err);}
+	});
+	
+}
+
+
+/* This is used for adding comments to a post */
+function make_comment(pid){
+	var comment_text= $('#comment_text').val();
+	if(comment_text == ""){
+		alert("You cannot post an empty comment.")
+	}else{
+		var form= document.getElementById("post_comment_modal_make_comment");
+		formdata= new FormData(form);
+		formdata.append('post_id', pid);
+
+		$.ajax({
+			url:'/posts/ajax/makecomment/',
+			data:formdata,
+			type:'post',
+			dataType:'json',
+			success:function(rsp){
+				if(rsp.status == 1){
+					var text= `<div class= "row mb-1 border-top border-bottom" style= "background-color:#eee;"><div class= "col">
+						<small>You</small>
+						<p>${comment_text}</p>
+						<small><span id= "like_no${rsp.comid}">0<span> likes. </small>
+						<button class= "btn" onclick= "like_comment(${rsp.comid})"><i class="fa-solid fa-thumbs-up"></i></button>
+					</div></div>`;
+					$('#post_modal_comment_container').prepend(text);
+					$('#comment_text').val('');
+				}
+			},
+			error:function(err){console.log(err);},
+			cache:false,
+			contentType:false,
+			processData:false
+		});
+	}
+}
+
+
+/* This code is used for liking comments. */
+function like_comment(cid){
+	$.ajax({
+		url:'/posts/ajax/likecomment/',
+		data:{"comment_id":cid},
+		type:'get',
+		dataType:'json',
+		success:function(rsp){
+			if(rsp.status == 0){
+				alert("You have already liked this comment");
+			}else{
+				$('#like_no'+cid).text(rsp.likes);
+			}
+		},
+		error:function(err){console.log(err);}
+	});
+}
+
+
+/* This code is used for checking whether a username is taken */
+function check_username(){
+	var uname= $('#username').val();
+
+	$.ajax({
+		url:'/ajax/checkusername/',
+		data:{'username':uname},
+		dataType:'json',
+		type:'get',
+		success:function(rsp){
+			if(rsp.status == 0){
+				$('.check_username_btn').prop('disabled', true);
+				$('#username_message').css('color', 'red');
+				$('#username_message').text('username is already taken');
+			}else{
+				$('.check_username_btn').prop('disabled', false);
+				$('#username_message').css('color', 'green');
+				$('#username_message').text('username is available');
+			}
+		},
+		error:function(err){console.log(err);}
+	});
+}
+
+
+function change_username(token){
+	var uname= $('#username').val();
+
+	$.ajax({
+		url:'/me/ajax/changeusername/',
+		data:{'username':uname, 'csrf_token':token},
+		dataType:'json',
+		type:'post',
+		success:function(rsp){
+			if(rsp.status == 1){
+				$('#me_developer_username').text(uname);
+			}
+		},
+		error:function(err){console.log(err);}
+	});
+}
+
+
+/* This code is used to change the password of an existing user */
+function change_password(){
+	var leng= $('[name= new_pswd]').val();
+	if (leng.length < 8){
+		alert("Password must be at least 8 characters long");
+	}else{
+		var form= document.getElementById('change_pswd_form');
+		var formdata= new FormData(form)
+
+		$.ajax({
+			url:'/me/ajax/changepassword/',
+			data:formdata,
+			dataType:'json',
+			type:'post',
+			success:function(rsp){
+				if(rsp.status == 0){
+					alert("Your password change was unsuccessful. Please try again")
+				}else{
+					alert("Your password has been successfully changed.")
+					$('[name= old_pswd]').val("");
+					$('[name= new_pswd]').val("");
+					$('[name= cnew_pswd]').val("");
+				}
+			},
+			error:function(err){console.log(err);},
+			cache:false,
+			contentType:false,
+			processData:false
+		});
+	}
+}
+
+
+/* This is used to send information using contact us form */
+function contact_us(){
+	var name= $('[name=cname]').val();
+	var email= $('[name=cemail]').val();
+	var message= $('[name=cmessage]').val();
+
+	//check if any of the fields are empty
+	if(name == "" || email == "" || message == ""){
+		alert("Please fill all the fields");
+	}else{
+		var form= document.getElementById('contact_form');
+		var formdata= new FormData(form)
+
+		$.ajax({
+			url:'/ajax/contactus/',
+			data:formdata,
+			dataType:"json",
+			type:'post',
+			success:function(rsp){
+				if(rsp.status == 1){
+					$('#contact_message').css('color', 'green');
+					$('#contact_message').text('Your message has been received. We will get back to you as soon as possible')
+
+					$('[name=cname]').val('');
+					$('[name=cemail]').val('');
+					$('[name=cmessage]').val('');
+				}
+			},
+			error:function(err){console.log(err);},
+			cache:false,
+			contentType:false,
+			processData:false
+		});
+	}
 }

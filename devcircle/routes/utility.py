@@ -14,10 +14,19 @@ def pagenotfound(error):
 def save_languages():
     devlang= request.form.getlist('language')
     dev_id= request.form.get('dev_id')
+    form_id= request.form.get('form_id')
 
     if devlang == []:
         return jsonify(status=0, message="You have to choose at least one language")
 
+    #checking if the developer already has some languages saved and deleting them
+    chkdlo= db.session.execute(f"SELECT * FROM dev_languages WHERE dev_id = '{dev_id}'")
+    chkdl= chkdlo.fetchall()
+    if chkdl != []:
+        deldlo= db.session.execute(f"DELETE FROM dev_languages WHERE dev_id = '{dev_id}'")
+        db.session.commit()
+
+    #inserting the languages into the table
     try:
         for i in devlang:
             db.session.execute(f'INSERT INTO dev_languages SET dev_id = "{dev_id}", lang_id = "{i}"')
@@ -27,17 +36,20 @@ def save_languages():
 
     db.session.commit()
 
-    tang= ",".join([str(o) for o in devlang])
-    gl= db.session.execute(f"SELECT grp_id FROM grp_languages WHERE lang_id IN ({tang})")
-    ggl= gl.fetchall()
-    glang= [g.grp_id for g in ggl]
-    gr= Group.query.filter(Group.grp_id.in_(glang), Group.grp_type == "public").all()
-    grp_list= []
-    for i in gr:
-        b= [i.grp_name, i.grp_desc, i.grp_id]
-        grp_list.append(b)
-    
-    return jsonify(status=1, message="Languages saved", glang=grp_list)
+    if form_id == 'land_choose_lang':
+        tang= ",".join([str(o) for o in devlang])
+        gl= db.session.execute(f"SELECT grp_id FROM grp_languages WHERE lang_id IN ({tang})")
+        ggl= gl.fetchall()
+        glang= [g.grp_id for g in ggl]
+        gr= Group.query.filter(Group.grp_id.in_(glang), Group.grp_type == "public").all()
+        grp_list= []
+        for i in gr:
+            b= [i.grp_name, i.grp_desc, i.grp_id]
+            grp_list.append(b)
+        
+        return jsonify(status=1, message="Languages saved", glang=grp_list)
+    else:
+        return jsonify(status=1)
 
 
 @app.route('/landing/ajax/getgroupinfo/')
@@ -89,3 +101,80 @@ def submit_post():
 
 
     return jsonify(status=1, message="Post submitted.", post=post)
+
+
+@app.route('/posts/ajax/retrivepost/')
+@dev_validation
+def retrieve_post():
+    did= session.get("dev_id")
+    pid= request.args.get('post_id')
+    gid= request.args.get('grp_id')
+    posid= request.args.get('poster_id')
+
+    #retrieve the post
+    pt= Post.query.get(pid)
+    post= [pt.title, pt.post, pt.post_id]
+
+    #retrieve all comments of the post
+    p_com= Comment.query.filter(Comment.post_id == pid).order_by(Comment.com_like_no.desc()).all()
+    comments= []
+    if p_com != []:
+        com_status= 1
+        for i in p_com:
+            x= [i.com_text, i.commenter.username, i.com_like_no, i.com_id]
+            comments.append(x)
+    else:
+        com_status= 0
+
+
+    return jsonify(status=1, com_status=com_status, comments=comments, post=post)
+
+
+@app.route('/posts/ajax/makecomment/', methods=['POST', 'GET'])
+@dev_validation
+def make_comment():
+    comment= request.form.get('comment')
+    post_id= request.form.get('post_id')
+    did= session.get("dev_id")
+
+    #add the comment to the comment table
+    com= Comment(post_id=post_id, dev_id=did, com_text=comment)
+    db.session.add(com)
+    db.session.commit()
+
+    return jsonify(status=1, comid=com.com_id)
+
+
+@app.route('/posts/ajax/likecomment/')
+@dev_validation
+def like_comment():
+    cid= request.args.get('comment_id')
+    did= session.get("dev_id")
+
+    #check if the user has already liked the comment
+    chklk= Liker.query.filter(Liker.com_id == cid, Liker.dev_id == did).first()
+    if chklk != None:
+        return jsonify(status=0)
+    else:
+        #if user has not liked tweet
+        #retrive the comment and add one to it's number of likes
+        com= Comment.query.get(cid)
+        new_like_no= com.com_like_no + 1
+        com.com_like_no= com.com_like_no + 1
+        
+        #add the comment and developer to liker table
+        nwlk= Liker(com_id=cid, dev_id=did)
+        db.session.add(nwlk)
+        db.session.commit()
+
+        return jsonify(status=1, likes=new_like_no)
+
+
+@app.route('/ajax/checkusername/')
+def check_username():
+    uname= request.args.get('username')
+    chk= Developer.query.filter(Developer.username == uname).first()
+    if chk != None:
+        return jsonify(status=0)
+    else:
+        return jsonify(status=1)

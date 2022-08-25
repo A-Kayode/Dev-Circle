@@ -53,3 +53,17 @@ def login():
     d= Developer.query.filter(Developer.username == username).first()
     session['dev_id']= d.dev_id
     return redirect('/landing/')
+
+
+@app.route('/ajax/contactus/', methods=['POST', 'GET'])
+def contact_us():
+    name= request.form.get('cname')
+    email= request.form.get('cemail')
+    message= request.form.get('cmessage')
+
+    #insert the messaage into the contact us table
+    cm= Contact_messages(name=name, email=email, message=message)
+    db.session.add(cm)
+    db.session.commit()
+
+    return jsonify(status=1)

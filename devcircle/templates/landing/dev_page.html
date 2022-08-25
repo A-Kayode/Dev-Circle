@@ -8,30 +8,12 @@
 		<p>Welcome to Dev-Circle. Choose some languages to get started</p>
 		<form id= "land_choose_lang">
 			<div class= "row">
+				{% for i in lang %}
 				<div class= "col-3">
-					<input type= "checkbox" name= "language" value= "1">
-					<label class= "form-label">CSS</label>
+					<input type= "checkbox" name= "language" value= "{{i.lang_id}}">
+					<label class= "form-label">{{i.lang_name}}</label>
 				</div>
-				<div class= "col-3">
-					<input type= "checkbox" name= "language" value= "2">
-					<label class= "form-label">HTML</label>
-				</div>
-				<div class= "col-3">
-					<input type= "checkbox" name= "language" value= "3">
-					<label class= "form-label">Javascript</label>
-				</div>
-				<div class= "col-3">
-					<input type= "checkbox" name= "language" value= "4">
-					<label class= "form-label">MySQL</label>
-				</div>
-				<div class= "col-3">
-					<input type= "checkbox" name= "language" value= "5">
-					<label class= "form-label">PHP</label>
-				</div>
-				<div class= "col-3">
-					<input type= "checkbox" name= "language" value= "6">
-					<label class= "form-label">PYTHON</label>
-				</div>
+				{% endfor %}
 			</div>
 			<input type= "hidden" name= "csrf_token" id= "csrf_token" value= {{csrf_token()}}>
 			<div>
@@ -47,8 +29,7 @@
 	<div class= "col">
 		<div class= "row">
 			<div class= "col">
-				<p>Picture area and username here</p>
-				<p>Make a post</p>
+				<p class= "bg-success text-light text-center"><b>MAKE A POST</b></p>
 				<form>
 					<div class= "mb-2">
 						<select class= "form-select" id= "post_choosegroup">
@@ -83,15 +64,21 @@
 <div class= "row"><div class= "col post_container">
 {% if posts != [] %}
 {% for p in posts %}
-<div class= "row whitebg mb-2">
-	<div class= "col">
+<div class= "row whitebg mb-2 select_group">
+	<div class= "col" onclick= "view_post({{p.post_id}}, {{p.group.grp_id}}, {{p.poster.mem_id}})">
 		<small class= "mb-1">(image here) {% if p.poster.developer.username ==  dev.username %} You {% else %}{{p.poster.developer.username}} {% endif %} on {{p.date_posted.strftime('%d %b, %Y.  %H:%M')}}</small>
 		<h5>{{p.title}}</h5>
-		<p>{{p.post}}</p>
+		<p style= "max-height:10vh">{{p.post}}</p>
 		<small>Group: {{p.group.grp_name}}</small>
 	</div>
 </div>
 {% endfor %}
+{% else %}
+<div class= "row whitebg mb-2">
+	<div class= "col">
+		<p>There are no posts from any of your groups.</p>
+	</div>
+</div>
 {% endif %}
 </div></div>
 
@@ -105,6 +92,7 @@
 </div>
 
 
+{% include 'landing/post_comment_modal.html' %}
 {% endblock body %}
 
 {% block internal_scripts %}

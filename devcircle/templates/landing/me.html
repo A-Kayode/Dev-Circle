@@ -1,0 +1,108 @@
+{% extends 'landing/base.html' %}
+
+{% block body %}
+<div class= "row whitebg mb-2">
+	<div class= "col bg-success text-light">
+		<h4 id= "me_developer_username">{{d.username}}</h4>
+		<p>Name: {{d.fname}} {{d.lname}}</p>
+		<p>Email: {{d.email}}</p>
+	</div>
+</div>
+
+
+
+<div class= "row mb-5">
+	<div class= "col">
+		<div class= "row whitebg yellowish_area">
+			<div class= "col text-center">
+				<h4>Change Username</h4>
+			</div>
+		</div>
+
+		<div class= "row whitebg justify-content-center">
+			<div class= "col-4 text-center">
+				<form>
+					<div class= "col mb-1">
+						<label class= "form-label">Enter New Username</label>
+						<div><span id= "username_message"></span></div>
+						<input type= "text" name= "username" class= "form-control" id= "username" onchange= "check_username()">
+					</div>
+					<div>
+						<button type= "button" class= "btn btn-success check_username_btn" onclick= "change_username('{{csrf_token()}}')" disabled>Change Username</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class= "row mb-5"><div class="col">
+	<div class= "row whitebg yellowish_area">
+		<div class= "col text-center">
+			<h4>Choose Languages</h4>
+		</div>
+	</div>
+
+
+	<div class= "row whitebg mb-2">
+		<div class= "col">
+			<form id= "me_choose_lang">
+				<div class= "row">
+					{% for i in lang %}
+					<div class= "col-3">
+						{% if i.lang_id in dl %}
+						<input type= "checkbox" name= "language" value= "{{i.lang_id}}" checked>
+						{% else %}
+						<input type= "checkbox" name= "language" value= "{{i.lang_id}}">
+						{% endif %}
+						<label class= "form-label">{{i.lang_name}}</label>
+					</div>
+					{% endfor %}
+				</div>
+				<input type= "hidden" name= "csrf_token" id= "csrf_token" value= {{csrf_token()}}>
+				<div>
+					<button class= "btn btn-primary rounded-pill" type= "button" onclick= "choose_language({{d.dev_id}}, 'me_choose_lang')">Save</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div></div>
+
+
+
+<div class= "row">
+	<div class= "col">
+		<div class= "row whitebg yellowish_area">
+			<div class= "col text-center">
+				<h4>Change Password</h4>
+			</div>
+		</div>
+
+		<div class= "row whitebg mb-2 justify-content-center">
+			<div class= "col-4 text-center">
+				<form id= "change_pswd_form">
+					<div class= "mb-2 col">
+						<label class= "form-label">Old Password</label>
+						<input type= "password" class= "form-control" name= "old_pswd">
+					</div>
+					<div class= "mb-2 col">
+						<label class= "form-label">New Password</label>
+						<input type= "password" class= "form-control" name= "new_pswd">
+					</div>
+					<div class= "mb-2 col">
+						<label class= "form-label">Confirm New Password</label>
+						<input type= "password" class= "form-control" name= "cnew_pswd">
+					</div>
+					<div>
+						<button type= "button" class= "btn btn-success" onclick= "change_password()">Change Password</button>
+					</div>
+					<input type= "hidden" name= "csrf_token" value= "{{csrf_token()}}">
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock body %}
