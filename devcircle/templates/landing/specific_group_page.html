@@ -9,13 +9,13 @@
 {% block body %}
 <!-- This contains the group information -->
 <div class= "row whitebg mb-1" id= "grp_desc_area">
-	<div class= "col-7">
+	<div class= "col-12 col-sm-7">
 		<h2>{{g.grp_name}}</h2>
 		<p>{{g.grp_desc}}</p>
 		<p><i>This is a {{g.grp_type.name}} group</i></p>
 	</div>
 
-	<div class= "col text-end">
+	<div class= "col text-sm-end">
 		<button class= "btn btn-outline-primary" data-bs-toggle= "modal" data-bs-target= "#group_rules_modal">Rules</button>
 		<button class= "btn btn-outline-danger" id= "ginfo_leave" onclick= "leave_group({{g.grp_id}})">Leave Group</button>
 		<button class= "btn btn-outline-success" id= "ginfo_join" onclick= "join_group({{g.grp_id}})">Join Group</button>
@@ -28,7 +28,7 @@
 <!-- This contains the content of the group page -->
 <div class= "row">
 <!-- This contaisn the area to see all avalaible memebers -->
-<div class= "col-3 me-1">
+<div class= "col-12 col-md-3 me-1 d-none d-sm-block" id= "group_member_area">
 	<div class= "row whitebg mb-1">
 		<div class= "col">
 			<h5 class= 'text-center'>Group Members</h5>
@@ -91,14 +91,13 @@
 
 
 <!-- This contains the area for posts -->
-<div class= "col-7">
+<div class= "col-12 col-sm-7" id= "group_posts_area">
 	{% if memb == 1 %}
 	<div class= "row whitebg mb-2">
 		<div class= "col">
 			<div class= "row">
 				<div class= "col">
-					<p>Picture area and username here</p>
-					<p>Make a post</p>
+					<p class= "bg-success text-light text-center">Make a post</p>
 					<form>
 						<div class= "mb-2">
 							<label class= "form-label">Title(optional)</label>
@@ -148,10 +147,10 @@
 
 <!-- This contains to see the current contended and completed projects awaiting voting -->
 {% if memb == 1 %}
-<div class= "col ms-1">
+<div class= "col ms-1 d-none d-sm-block" id= "group_contention_area">
 	<div class= "row whitebg mb-1">
 		<div class= "col text-center">
-			<h5>Contended Projects</h5>
+			<h5>Projects</h5>
 		</div>
 	</div>
 
@@ -184,6 +183,34 @@
 {% endif %}
 </div>
 
+
+<!-- This contains a mini-menu that shows on mobile view -->
+<div class= "row whitebg d-block d-sm-none" style= "position: fixed; bottom: 0px; width:100%">
+	<div class= "col text-center">
+		<button class= "btn btn-lg" data-bs-toggle="tooltip" data-bs-title="Group Members" onclick= "
+			$('#group_posts_area').addClass('d-none');
+			$('#group_contention_area').addClass('d-none');
+			$('#group_member_area').removeClass('d-none');
+		">
+			<i class="fa-solid fa-user"></i>
+		</button>
+		<button class= "btn btn-lg" data-bs-toggle="tooltip" data-bs-title="Group Posts" onclick= "
+			$('#group_posts_area').removeClass('d-none');
+			$('#group_contention_area').addClass('d-none');
+			$('#group_member_area').addClass('d-none');
+		">
+			<i class="fa-solid fa-newspaper"></i>
+		</button>
+		<button class= "btn btn-lg" data-bs-toggle="tooltip" data-bs-title="Project Contention" onclick= "
+			$('#group_posts_area').addClass('d-none');
+			$('#group_contention_area').removeClass('d-none');
+			$('#group_member_area').addClass('d-none');
+		">
+			<i class="fa-solid fa-xmark"></i>
+		</button>
+	</div>
+</div>
+
 {% include 'landing/assign_project_modal.html' %}
 {% include 'landing/contention_info_modal.html' %}
 {% include 'landing/send_messages_modal.html' %}
@@ -205,5 +232,6 @@ $(document).ready(function(){
 	}
 });	
 
+/* This code is used for displaying and hiding categories on small screen widths */
 </script>
 {% endblock internal_scripts %}

@@ -20,7 +20,7 @@
 		</div>
 
 		<div class= "row whitebg justify-content-center">
-			<div class= "col-4 text-center">
+			<div class= "col-11 col-md-4 text-center">
 				<form>
 					<div class= "col mb-1">
 						<label class= "form-label">Enter New Username</label>
@@ -51,7 +51,7 @@
 			<form id= "me_choose_lang">
 				<div class= "row">
 					{% for i in lang %}
-					<div class= "col-3">
+					<div class= "col-4 col-md-3">
 						{% if i.lang_id in dl %}
 						<input type= "checkbox" name= "language" value= "{{i.lang_id}}" checked>
 						{% else %}
@@ -81,7 +81,7 @@
 		</div>
 
 		<div class= "row whitebg mb-2 justify-content-center">
-			<div class= "col-4 text-center">
+			<div class= "col-11 col-md-4 text-center">
 				<form id= "change_pswd_form">
 					<div class= "mb-2 col">
 						<label class= "form-label">Old Password</label>

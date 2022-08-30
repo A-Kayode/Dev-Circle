@@ -16,12 +16,16 @@
 
 <body>
 <div class= "container">
-	<div class= "row align-items-end whitebg">
-		<div class= "col-4">
+	<div class= "row align-items-end whitebg py-1">
+		<div class= "col">
 			<a href= "/"><img src= "/static/images/dev_circle.png" alt= "devcircle logo" class= "logo"></a>
 		</div>
 
-		<div class= "col">
+		<div class= "col d-block d-sm-none text-end">
+			<button id= "nav_toggle_btn" class= "btn btn"><i class= "fa-solid fa-list"></i></button>
+		</div>
+
+		<div class= "col-12 col-sm-9 col-xl-8 d-none d-sm-block" id= "navigation_container">
 			<ul class= "nav">
 				<li class= "nav-link"><a href= "{{url_for('dev_landing')}}" class= "btn btn-outline-success">Home</a></li>
 				<li class= "nav-link"><a href= "{{url_for('all_groups')}}" class= "btn btn-outline-success">Groups</a></li>
@@ -53,6 +57,10 @@
 <script type= "text/javascript">
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+$('#nav_toggle_btn').click(function(){
+	$('#navigation_container').toggleClass("d-none d-sm-block");
+});
+
 
 </script>
 {% block internal_scripts %}

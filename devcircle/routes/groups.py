@@ -202,3 +202,42 @@ def check_group_name():
         return jsonify(status=0)
     else:
         return jsonify(status=1)
+
+
+@app.route('/groups/search/')
+@dev_validation
+def group_search():
+    gname= request.args.get("group")
+    #spliitting the group name inputted into a list of strings to act as keys
+    grpkeys= gname.split()
+
+    #getting the grooups that match the list of strings used as keys
+    temagrps= []
+    temagrpsname= []
+    agrpname= []
+    agrps= []
+    #querying for records using the list of keys
+    for i in grpkeys:
+        x= Group.query.filter(Group.grp_name.like(f'%{i}%')).all()
+        #appending each record into temagrps
+        for j in x:
+            temagrps.append(j)
+    #ensuring that only unique records are put into agrps list
+    for i in temagrps:
+        temagrpsname.append(i.grp_name)
+    for i in temagrpsname:
+        if i not in agrpname:
+            agrpname.append(i)
+    for i in temagrps:
+        for j in agrpname:
+            if j == i.grp_name:
+                agrps.append(i)
+
+    
+    #getting the total number of members in each group fetched
+    totalmem= []
+    for i in agrps:
+        x= Member.query.filter(Member.grp_id == i.grp_id, Member.status == "joined").count()
+        totalmem.append(x)
+
+    return render_template('landing/search_group.html', agrps=agrps, tomem=totalmem, gname=gname)

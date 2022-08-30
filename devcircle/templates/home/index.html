@@ -2,9 +2,8 @@
 
 {% block internal_styles %}
 <style>
-div{ border:0px solid red; min-height:20px; }
 body{ background-color: #eee; }
-
+btn-success{ background-color: rgb(71, 188, 69); }
 </style>
 {% endblock internal_styles %}
 
@@ -17,7 +16,11 @@ body{ background-color: #eee; }
 			</h2>
 		</div>
 
-		<div class= "col">
+		<div class= "col d-block d-sm-none text-end">
+			<button id= "nav_toggle_btn" class= "btn btn"><i class= "fa-solid fa-list"></i></button>
+		</div>
+
+		<div class= "col-12 col-sm-8 col-md-6 d-none d-sm-block" id= "navigation_container">
 			<ul id= "homenavigation" class= "nav justify-content-end">
 				<li class="nav-item"><a href= "/" class= "btn nav-link home-navig-link">Home</a></li>
 				<li class="nav-item"><button class= "btn home-navig-link" data-bs-toggle= "modal" data-bs-target= "#login_modal">Login</button></li>
@@ -39,6 +42,12 @@ body{ background-color: #eee; }
 							<h2 id= "home_welcome_heading" class= "text-center">New to Software Development? Never Feel Alone Again!</h2>
 							<p class= "text-center home_banner_text"><span style= "color: rgb(71, 188, 69);">DEV-CIRCLE</span> connects you to new and experienced software developers all over the world.</p>
 							<p class= "text-center home_banner_text">Share posts, messages, problems and even tasks with fellow developers about the languages that makes you the most excited.</p>
+							<p class= "text-center home_banner_text">Join Us Today!</p>
+							<p class= "text-center">
+								<button class= "btn btn-success btn-lg rounded-pill" data-bs-toggle= "modal" data-bs-target= "#login_modal">Login</button>
+								<button class= "btn btn-success btn-lg rounded-pill" data-bs-toggle= "modal" data-bs-target= "#signup_modal">SignUp</button>
+
+							</p>
 						</div>
 					</div>
 				</div>
@@ -78,4 +87,10 @@ body{ background-color: #eee; }
 
 
 {% block internal_script %}
+<script type= "text/javascript">
+$('#nav_toggle_btn').click(function(){
+	$('#navigation_container').toggleClass("d-none d-sm-block");
+});
+
+</script>
 {% endblock internal_script %}

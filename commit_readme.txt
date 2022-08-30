@@ -26,3 +26,8 @@ Dev Circle Version 0.004
 4. Clicking on rules button now shows the rules of the specific group
 5. Added ability to cancel tasks by the assigner
 6. Option to message assigner now available straight from the projects page.
+
+
+Dev Circle Version 0.005
+1. Added search feature for groups
+2. Made site responsive

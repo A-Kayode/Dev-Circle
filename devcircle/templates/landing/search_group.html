@@ -1,0 +1,41 @@
+{% extends 'landing/base.html' %}
+
+{% block body %}
+<div class= "row">
+	<div class= "col">
+		<div class= "row whitebg mb-2">
+			<div class= "col">
+				<form action= "/groups/search/">
+					<div class= "mb-1">
+						<input type= "text" name= "group" id= "group_search" class= "form-control" placeholder="Search for groups here">
+					</div>
+					<div class= "text-center">
+						<button class= "btn btn-success">Search</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		{% if agrps != [] %}
+		<h4>Search results for '{{gname}}'</h4>
+		{% for i in agrps %}
+		<div class= "row whitebg mb-1 select_group">
+			<a href= "/groups/{{i.grp_id}}/" id= "visit_group_link">
+				<div class= "col">
+					<h3>{{i.grp_name}}</h3>
+					<small style= "color:black">Members: {{tomem[loop.index - 1]}}</small>
+				</div>
+			</a>
+		</div>
+		{% endfor %}
+		{% else %}
+		<div class= "row">
+			<div class= "col">
+				<h4>No groups match '{{gname}}'</h4>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+</div>
+
+{% endblock body %}

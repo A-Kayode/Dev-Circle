@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class= "row">
-	<div class= "col-3 me-2">
+	<div class= "col-3 me-2 d-none d-sm-block">
 		<div class= "row bg-success text-light pb-2">
 			<div class= "col text-center">
 				<h5>Recommended Groups</h5>
@@ -16,9 +16,9 @@
 				<p>{{ i.grp_name }}</p>
 				<small>Members: {{rtotalmem[loop.index - 1]}}</small>
 				<div>
-					<a href= "/groups/{{i.grp_id}}/" class= "btn btn-secondary">Visit Group</a>
-					<button class= "btn btn-outline-danger ginfo_leave" id= "leave_{{i.grp_id}}" onclick= "leave_group({{i.grp_id}}, 'leave_{{i.grp_id}}', 'join_{{i.grp_id}}')">Leave Group</button>
-					<button class= "btn btn-outline-success ginfo_join" id= "join_{{i.grp_id}}" onclick= "join_group({{i.grp_id}}, 'leave_{{i.grp_id}}', 'join_{{i.grp_id}}')">Join Group</button>
+					<a href= "/groups/{{i.grp_id}}/" class= "btn btn-secondary m-1">Visit Group</a>
+					<button class= "btn btn-outline-danger ginfo_leave m-1" id= "leave_{{i.grp_id}}" onclick= "leave_group({{i.grp_id}}, 'leave_{{i.grp_id}}', 'join_{{i.grp_id}}')">Leave Group</button>
+					<button class= "btn btn-outline-success ginfo_join m-1" id= "join_{{i.grp_id}}" onclick= "join_group({{i.grp_id}}, 'leave_{{i.grp_id}}', 'join_{{i.grp_id}}')">Join Group</button>
 				</div>
 
 			</div>
@@ -36,6 +36,25 @@
 
 
 	<div class= "col">
+		<div class= "row mb-2">
+			<div class= "col bg-success d-inline d-sm-none text-center">
+				<button class= "btn btn-success" data-bs-toggle= "modal" data-bs-target= "#create_group_modal">Create Group</button>
+			</div>
+		</div>
+
+		<div class= "row whitebg mb-2">
+			<div class= "col">
+				<form action= "/groups/search/">
+					<div class= "mb-1">
+						<input type= "text" name= "group" id= "group_search" class= "form-control" placeholder="Search for groups here">
+					</div>
+					<div class= "text-center">
+						<button class= "btn btn-success">Search</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
 		{% if agrps != [] %}
 		{% for i in agrps %}
 		<div class= "row whitebg mb-1 select_group">
@@ -57,8 +76,10 @@
 	</div>
 
 
-	<div class= "col-2 ms-2 whitebg text-center" style= "height: 50px;">
-		<button class= "btn btn-success" data-bs-toggle= "modal" data-bs-target= "#create_group_modal">Create Group</button>
+	<div class= "col-2 ms-1 d-none d-sm-block">
+		<p class= "whitebg text-center p-2">
+			<button class= "btn btn-success" data-bs-toggle= "modal" data-bs-target= "#create_group_modal">Create Group</button>
+		</p>
 	</div>
 </div>
 

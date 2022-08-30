@@ -68,6 +68,11 @@ home_welcome_heading  --> id to control the size of the heading text on home pag
 contact_message  --> tag to receive confirmation of message sent
 contact_form  --> form id of contact us modal
 grp_desc_area  --> area that contains the information about a particular group
+navigation_container  --> col that has the navigation links
+nav_toggle_btn  --> button that controls appearance and disapperance of navigation
+group_member_area  --> area for group members in specific group page
+group_posts_area  --> area for group posts in specific group page
+group_contention_area  --> area for contested projects in specific group page
 
 
 
