@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class= "row">
-	<div class= "col-3 me-2 d-none d-sm-block">
+	<div class= "col-12 col-sm-3 me-2 d-none d-sm-block" id= "groups_recommended_groups">
 		<div class= "row bg-success text-light pb-2">
 			<div class= "col text-center">
 				<h5>Recommended Groups</h5>
@@ -35,7 +35,7 @@
 
 
 
-	<div class= "col">
+	<div class= "col" id= "groups_all_groups">
 		<div class= "row mb-2">
 			<div class= "col bg-success d-inline d-sm-none text-center">
 				<button class= "btn btn-success" data-bs-toggle= "modal" data-bs-target= "#create_group_modal">Create Group</button>
@@ -80,6 +80,25 @@
 		<p class= "whitebg text-center p-2">
 			<button class= "btn btn-success" data-bs-toggle= "modal" data-bs-target= "#create_group_modal">Create Group</button>
 		</p>
+	</div>
+</div>
+
+
+<!-- This contains a mini-menu that shows on mobile view -->
+<div class= "row whitebg d-block d-sm-none" style= "position: fixed; bottom: 0px; width:100%">
+	<div class= "col text-center">
+		<button class= "btn btn-lg" data-bs-toggle="tooltip" data-bs-title="Recommended Groups" onclick= "
+			$('#groups_all_groups').addClass('d-none');
+			$('#groups_recommended_groups').removeClass('d-none');
+		">
+			<i class="fa-solid fa-user"></i>
+		</button>
+		<button class= "btn btn-lg" data-bs-toggle="tooltip" data-bs-title="Your Groups" onclick= "
+			$('#groups_all_groups').removeClass('d-none');
+			$('#groups_recommended_groups').addClass('d-none');
+		">
+			<i class="fa-solid fa-user-group"></i>
+		</button>
 	</div>
 </div>
 

@@ -31,3 +31,7 @@ Dev Circle Version 0.004
 Dev Circle Version 0.005
 1. Added search feature for groups
 2. Made site responsive
+
+
+Dev Circle Version 0.006
+1. Added responsiveness enabled feature for groups page
